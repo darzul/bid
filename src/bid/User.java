@@ -1,7 +1,9 @@
 package bid;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.TimeZone;
 
 import alert.AlertType;
 
@@ -10,35 +12,61 @@ public class User {
 	String login;
 	String lastName;
 	String firstName;
-	List<Bid> ownedBids;
+	ArrayList<Bid> ownedBids = null;
 	
-	private boolean createBid (Item item, Date deadLine, float price)
+	// create a bid without any reservedPrice
+	private Bid createBid (Item item, Date deadLine, float minPrice)
 	{
-		return false;
+		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
+		//TODO : quelle valeur pour le reservePrice ˆ minPrice ?
+		return newBid;
 	}
 	
-	private boolean createBid (Item item, Date deadLine, float price, float reservedPrice)
+	// create a bid with a reservedPrice
+	private Bid createBid (Item item, Date deadLine, float minPrice, float reservedPrice)
 	{
-		return false;
+		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
+		return newBid;
 	}
 	
-	private boolean cancelBid (Bid bid)
+	// removes a bid
+	private Bid cancelBid (Bid bid)
 	{
-		return false;
+		for(Bid bidToCancel : ownedBids) {
+		    if(bidToCancel == bid){
+		    	bidToCancel.setState(BidState.CANCELED);
+		    }
+		}
+		return bid;
 	}
 	
-	private boolean publishBid (Bid bid)
+	private Bid publishBid (Bid bid)
 	{
-		return false;
+		for(Bid bidToPublish : ownedBids) {
+		    if(bidToPublish == bid){
+		    	bidToPublish.setState(BidState.PUBLISHED);
+		    }
+		}
+		return bid;
 	}
 	
-	private boolean hideBid (Bid bid)
+	private Bid hideBid (Bid bid)
 	{
-		return false;
+		for(Bid bidToHide : ownedBids) {
+		    if(bidToHide == bid){
+		    	bidToHide.setState(BidState.CREATED);
+		    }
+		}
+		return bid;
 	}
 	
-	private boolean setReservedPrice (float price)
+	private boolean setReservedPrice (float reservedPrice, Bid bid)
 	{
+		for(Bid bidToEdit : ownedBids) {
+		    if(bidToEdit == bid){
+		    	bidToEdit.setReservedPrice(reservedPrice);
+		    }
+		}
 		return false;
 	}
 	
@@ -55,5 +83,10 @@ public class User {
 	private boolean createAlert (Bid bid, AlertType alertType)
 	{
 		return false;
+	}
+	
+	public ArrayList<Bid> getOwnedBids ()
+	{
+		return ownedBids;
 	}
 }
