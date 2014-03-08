@@ -1,7 +1,7 @@
 package bid;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import alert.AlertType;
 
@@ -10,50 +10,55 @@ public class User {
 	String login;
 	String lastName;
 	String firstName;
-	List<Bid> ownedBids;
+	ArrayList<Bid> ownedBids = null;
 	
-	private boolean createBid (Item item, Date deadLine, float price)
+	public boolean createBid (Item item, Date deadLine, float price)
 	{
 		return false;
 	}
 	
-	private boolean createBid (Item item, Date deadLine, float price, float reservedPrice)
+	public boolean createBid (Item item, Date deadLine, float price, float reservedPrice)
 	{
 		return false;
 	}
 	
-	private boolean cancelBid (Bid bid)
+	public boolean cancelBid (Bid bid)
 	{
 		return false;
 	}
 	
-	private boolean publishBid (Bid bid)
+	public boolean publishBid (Bid bid)
 	{
 		return false;
 	}
 	
-	private boolean hideBid (Bid bid)
+	public boolean hideBid (Bid bid)
 	{
 		return false;
 	}
 	
-	private boolean setReservedPrice (float price)
+	public boolean setReservedPrice (float price)
 	{
 		return false;
 	}
 	
-	private boolean setMinPrice (float price)
+	public boolean setMinPrice (float price)
 	{
 		return false;
 	}
 	
-	private boolean makeOffer (Bid bid, float price)
+	public boolean makeOffer (Bid bid, float price)
 	{
 		return false;
 	}
 	
-	private boolean createAlert (Bid bid, AlertType alertType)
+	public boolean createAlert (Bid bid, AlertType alertType)
 	{
 		return false;
 	}
+	
+	public ArrayList<Bid> getOwnedBids ()
+	{
+		return this.ownedBids;
+	}	
 }

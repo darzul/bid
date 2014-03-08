@@ -9,10 +9,6 @@ public class Ebay {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		Bid bid = new Bid();
-		User user = new User();
-		Item item = new Item();
-		Offer offer = new Offer();
 	}
 
 }
