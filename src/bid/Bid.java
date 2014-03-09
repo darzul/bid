@@ -9,11 +9,18 @@ public class Bid {
 	private BidState state;
 	private float minPrice;
 	private float reservedPrice;
+	Item item;
 	public Date getDeadLine() {
 		return deadLine;
 	}
 
-
+	public int getItemId() {
+		return this.item.getId();
+	}
+	
+	public String getItemDescription() {
+		return this.item.getDescription();
+	}
 
 	public void setDeadLine(Date deadLine) {
 		this.deadLine = deadLine;

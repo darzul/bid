@@ -15,8 +15,11 @@ public class AlertOutReservedPriceReached extends Alert {
 	}
 
 	@Override
-	protected boolean trigger() {
-
-		return false;
+	protected boolean trigger()
+	{
+		String mess = "The reserved price of the bid "+ bid.getItemId() + " is reached by an offer.";
+		sendMessage(this.user, mess);
+		
+		return true;
 	}
 }
