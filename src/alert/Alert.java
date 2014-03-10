@@ -34,4 +34,9 @@ public abstract class Alert {
 	{
 		return alerts;
 	}
+	
+	public void sendMessage(User user, String mess)
+	{
+		System.out.println("You have got a message.");
+	}
 }
