@@ -5,6 +5,7 @@ import bid.User;
 
 public class AlertSeller extends Alert {
 
+	// constructor
 	public AlertSeller(User user, Bid bid, AlertType type) {
 		super(user, bid, type);
 		// TODO Auto-generated constructor stub

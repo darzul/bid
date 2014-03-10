@@ -10,62 +10,11 @@ public class Bid {
 	private float minPrice;
 	private float reservedPrice;
 	Item item;
-	public Date getDeadLine() {
-		return deadLine;
-	}
-
-	public int getItemId() {
-		return this.item.getId();
-	}
-	
-	public String getItemDescription() {
-		return this.item.getDescription();
-	}
-
-	public void setDeadLine(Date deadLine) {
-		this.deadLine = deadLine;
-	}
-
-
-
-	public BidState getState() {
-		return state;
-	}
-
-
-
-	public void setState(BidState state) {
-		this.state = state;
-	}
-
-
-
-	public float getMinPrice() {
-		return minPrice;
-	}
-
-
-
-	public void setMinPrice(float minPrice) {
-		this.minPrice = minPrice;
-	}
-
-
-
-	public float getReservedPrice() {
-		return reservedPrice;
-	}
-
-
-
-	public void setReservedPrice(float reservedPrice) {
-		this.reservedPrice = reservedPrice;
-	}
-
 	private User seller;
 	private Offer lastOffer;
 	static private ArrayList<Bid> bids;
 	
+	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
 			float reservedPrice, User seller) {
 		super();
@@ -76,8 +25,56 @@ public class Bid {
 		this.seller = seller;
 		this.lastOffer = null;
 	}
+	
+	// getter
+	public Date getDeadLine() {
+		return deadLine;
+	}
 
+	// getter
+	public int getItemId() {
+		return this.item.getId();
+	}
+	
+	// getter
+	public String getItemDescription() {
+		return this.item.getDescription();
+	}
 
+	// setter
+	public void setDeadLine(Date deadLine) {
+		this.deadLine = deadLine;
+	}
+
+	// getter
+	public BidState getState() {
+		return state;
+	}
+
+	// setter
+	public void setState(BidState state) {
+		this.state = state;
+	}
+
+	//getter
+	public float getMinPrice() {
+		return minPrice;
+	}
+
+	// setter
+	public void setMinPrice(float minPrice) {
+		this.minPrice = minPrice;
+	}
+
+	// getter
+	public float getReservedPrice() {
+		return reservedPrice;
+	}
+
+	// setter
+	public void setReservedPrice(float reservedPrice) {
+		this.reservedPrice = reservedPrice;
+	}
 
 	// search alerts corresponding to the last event
 	private void checkAlerts ()
