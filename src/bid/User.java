@@ -4,6 +4,7 @@ package bid;
 import java.util.ArrayList;
 import java.util.Date;
 
+import alert.Alert;
 import alert.AlertType;
 
 public class User {
@@ -64,24 +65,33 @@ public class User {
 		for(Bid bidToEdit : ownedBids) {
 		    if(bidToEdit == bid){
 		    	bidToEdit.setReservedPrice(reservedPrice);
+		    	return true;
 		    }
 		}
 		return false;
 	}
 	
-	public boolean setMinPrice (float price)
+	public boolean setMinPrice (float minPrice, Bid bid)
 	{
+		for(Bid bidToEdit : ownedBids) {
+		    if(bidToEdit == bid){
+		    	bidToEdit.setMinPrice(minPrice);
+		    	return true;
+		    }
+		}
 		return false;
 	}
 	
-	public boolean makeOffer (Bid bid, float price)
+	public Offer makeOffer (Bid bid, float price)
 	{
-		return false;
+		Offer newOffer = new Offer(this, price, bid);
+		return newOffer;
 	}
 	
-	public boolean createAlert (Bid bid, AlertType alertType)
+	public Alert createAlert (Bid bid, AlertType alertType)
 	{
-		return false;
+		Alert newAlert = Alert.factory(this, bid, alertType);
+		return newAlert;
 	}
 	
 	public ArrayList<Bid> getOwnedBids ()

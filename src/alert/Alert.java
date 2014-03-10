@@ -12,6 +12,17 @@ public abstract class Alert {
 	AlertType type;
 	private static List<Alert> alerts;
 	
+	public Alert(User user, Bid bid, AlertType alertType) {
+		this.user = user;
+		this.bid = bid;
+		this.type = type;
+	}
+	
+	public static Alert factory(User user, Bid bid, AlertType alertType){
+		// TODO
+		return //TODO;
+	}
+
 	protected abstract boolean trigger ();
 	
 	public List<Alert> getAlerts (User user)

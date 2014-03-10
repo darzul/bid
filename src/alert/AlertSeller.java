@@ -4,12 +4,10 @@ import bid.Bid;
 import bid.User;
 
 public class AlertSeller extends Alert {
-	
-	public AlertSeller (User user, Bid bid, AlertType type)
-	{
-		this.bid = bid;
-		this.user = user;
-		this.type = type;
+
+	public AlertSeller(User user, Bid bid, AlertType type) {
+		super(user, bid, type);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
