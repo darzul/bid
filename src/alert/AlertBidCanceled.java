@@ -5,6 +5,7 @@ import bid.User;
 
 public class AlertBidCanceled extends Alert {
 
+	// constructor
 	public AlertBidCanceled(User user, Bid bid, AlertType type) {
 		super(user, bid, type);
 		// TODO Auto-generated constructor stub

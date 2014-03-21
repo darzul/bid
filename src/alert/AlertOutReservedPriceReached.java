@@ -7,6 +7,7 @@ public class AlertOutReservedPriceReached extends Alert {
 
 	public int publicTest=0;
 
+	// constructor
 	public AlertOutReservedPriceReached(User user, Bid bid, AlertType type) {
 		super(user, bid, type);
 		// TODO Auto-generated constructor stub

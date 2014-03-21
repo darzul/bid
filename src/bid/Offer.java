@@ -6,6 +6,7 @@ public class Offer {
 	private float price;
 	private Bid bid;
 	
+	// constructor
 	public Offer(User user, float price, Bid bid) {
 		super();
 		this.user = user;

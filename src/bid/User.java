@@ -15,6 +15,15 @@ public class User {
 	ArrayList<Bid> ownedBids = null;
 	Date deadline;
 	
+	// constructor
+	public User(String login, String lastName, String firstName) {
+		super();
+		this.login = login;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.ownedBids = null;
+	}
+
 	// create a bid without any reservedPrice
 	public Bid createBid (Item item, Date deadLine, float minPrice)
 	{
@@ -41,6 +50,7 @@ public class User {
 		return bid;
 	}
 	
+	// publish a bid
 	public Bid publishBid (Bid bid)
 	{
 		for(Bid bidToPublish : ownedBids) {
@@ -51,6 +61,7 @@ public class User {
 		return bid;
 	}
 	
+	// unpublish a bid = hide a bid
 	public Bid hideBid (Bid bid)
 	{
 		for(Bid bidToHide : ownedBids) {
@@ -61,6 +72,7 @@ public class User {
 		return bid;
 	}
 	
+	// change the reservedPrice of a bid
 	public boolean setReservedPrice (float reservedPrice, Bid bid)
 	{
 		for(Bid bidToEdit : ownedBids) {
@@ -72,6 +84,7 @@ public class User {
 		return false;
 	}
 	
+	// change the minPrice of a bid
 	public boolean setMinPrice (float minPrice, Bid bid)
 	{
 		for(Bid bidToEdit : ownedBids) {
@@ -83,18 +96,22 @@ public class User {
 		return false;
 	}
 	
+	// make an offer on a bid
 	public Offer makeOffer (Bid bid, float price)
 	{
 		Offer newOffer = new Offer(this, price, bid);
 		return newOffer;
 	}
 	
+	// creates an alert on a bid
 	public Alert createAlert (Bid bid, AlertType alertType)
 	{
 		Alert newAlert = Alert.factory(this, bid, alertType);
+		// TODO ce sera peu etre pas "factory"
 		return newAlert;
 	}
 	
+	//getter
 	public ArrayList<Bid> getOwnedBids ()
 	{
 		return this.ownedBids;
