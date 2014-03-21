@@ -13,6 +13,7 @@ public class User {
 	String lastName;
 	String firstName;
 	ArrayList<Bid> ownedBids = null;
+	Date deadline;
 	
 	// create a bid without any reservedPrice
 	public Bid createBid (Item item, Date deadLine, float minPrice)

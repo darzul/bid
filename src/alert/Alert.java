@@ -20,7 +20,7 @@ public abstract class Alert {
 	
 	public static Alert factory(User user, Bid bid, AlertType alertType){
 		// TODO
-		return //TODO;
+		return null;
 	}
 
 	protected abstract boolean trigger ();
