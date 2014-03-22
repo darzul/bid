@@ -15,78 +15,72 @@ public class BidTest {
 
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private Item item;
-	private User buyer;
-	private User seller1;
-	private User seller2;
+	private User seller;
+	private User buyer1;
+	private User buyer2;
 	private Bid bid;
 	
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
 		item = new Item ();
-		buyer = new User("DarzuL", "Bourderye", "Guillaume");
-		seller1 = new User("Karibou", "Bouvard","François");
-		seller2 = new User("Hoshiyo", "Guyen", "Anna");
-		bid = buyer.createBid(item, 10, 100);
-		bid.setState(BidState.PUBLISHED);
+		
+		seller = new User("DarzuL", "Bourderye", "Guillaume");
+		seller.createBid(item, 10, 100);
+		bid = seller.getOwnedBids().get(0);
+		
+		buyer1 = new User("Karibou", "Bouvard","François");
+		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
-
-	@Test
-	public void makeOfferOnNotPublishedBidTest() {
-		buyer.hideBid(bid);
-		Offer res = buyer.makeOffer( this.bid, 150 );
-		assertNull(res);
-	}
-	
-	@Test
-	public void makeOfferWithNegativePriceTest() {
-		Offer res = seller1.makeOffer( this.bid, -50 );
-		assertNull(res);
-	}
-	
-	@Test
-	public void makeOfferUnderMinPriceTest() {
-		Offer res = seller1.makeOffer( this.bid, 50 );
-		assertNull(res);
-	}
-	
-	@Test
-	public void makeOfferTest() {
-		Offer res = seller1.makeOffer( this.bid, 500 );
-		assertNotNull(res);
-	}
-	
-	@Test
-	public void makeOfferUnderMaxOfferTest() {
-		Offer res = seller1.makeOffer( this.bid, 150 );
-		assertNull(res);
-	}
-
-	@Test
-	public void makeOfferOnHisOwnBidTest() {
-		Offer res = buyer.makeOffer( this.bid, 150 );
-		assertNull(res);
-	}
-
-	@Test
-	public void makeOfferOnOutdatedBidTest() {
-		
-		Offer res = buyer.makeOffer( this.bid, 150 );
-		assertNull(res);
-	}
 	
 	@Test
 	public void seeNotPublishedBidTest() {
-		Offer res = seller1.makeOffer( this.bid, 150 );
-		assertNull(res);
+		assertNull(Bid.getBids(buyer1));
 	}
 	
 	@Test
 	public void seePublishedBidTest() {
-		assertNotNull(Bid.getBids(seller1));
+		bid.setState(BidState.PUBLISHED, seller);
+		assertNotNull(Bid.getBids(buyer1));
+	}
+	
+	@Test
+	public void makeOfferTest() {
+		assertTrue(buyer1.makeOffer( this.bid, 500 ));
+	}
+	
+	@Test
+	public void makeOfferOnHisOwnBidTest() {
+		assertFalse(seller.makeOffer( this.bid, 150 ));
+	}
+	
+	@Test
+	public void makeOfferOnNotPublishedBidTest() {
+		seller.hideBid(bid);
+		assertFalse(buyer1.makeOffer( this.bid, 150 ));
+	}
+	
+	@Test
+	public void makeOfferWithNegativePriceTest() {
+		assertFalse(buyer1.makeOffer( this.bid, -50 ));
+	}
+	
+	@Test
+	public void makeOfferUnderMinPriceTest() {
+		assertFalse(buyer1.makeOffer( this.bid, 50 ));
+	}
+	
+	@Test
+	public void makeOfferUnderMaxOfferTest() {
+		assertFalse(buyer2.makeOffer( this.bid, 150 ));
+	}
+
+	@Test
+	public void makeOfferOnOutdatedBidTest() {
+		assertFalse(buyer1.makeOffer( this.bid, 150 ));
 	}
 }

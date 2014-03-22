@@ -14,8 +14,7 @@ public class UserTest {
 	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 	private Item item;
 	private User buyer;
-	private User seller1;
-	private User seller2;
+	private User seller;
 	private Bid bid;
 	
 	@Before
@@ -30,26 +29,33 @@ public class UserTest {
 	}
 
 	@Test
-	public void createBidTest() {
-		this.bid = buyer.createBid(item, 10, 100);
-		assertNotNull(this.bid);
+	public void createBidWithoutReservedPriceTest() {
+		assertTrue(seller.createBid(item, 10, 100));
+	}
+	
+	@Test
+	public void createBidWithReservedPriceTest() {
+		assertTrue(seller.createBid(item, 10, 100, 200));
 	}
 
 	@Test
 	public void createPassedDateBidTest() {
-		Bid res = buyer.createBid(item, -1, 100);
-		assertNull(res);
+		assertFalse(seller.createBid(item, -1, 100));
 	}
 
 	@Test
 	public void createLowerReservedPriceThanMinPriceTest() {
-		Bid res = buyer.createBid(item, -10, 100, 50);
-		assertNull(res);
+		assertFalse(seller.createBid(item, -10, 100, 50));
 	}
 	
 	@Test
-	public void getReservedPriceTest() {
-		bid.getReservedPrice();
+	public void getReservedPriceToSellerTest() {
+		assertTrue( bid.getReservedPrice(seller) == 200 );
+	}
+	
+	@Test
+	public void getReservedPriceToBuyerTest() {
+		assertFalse( bid.getReservedPrice(seller) == -1 );
 	}	
 	
 	@Test
@@ -59,7 +65,6 @@ public class UserTest {
 	
 	@Test
 	public void createBidNegativePriceTest() {
-		Bid res = buyer.createBid(item, 10, -100);
-		assertNull (res);
+		assertNull (buyer.createBid(item, 10, -100));
 	}
 }

@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import alert.Alert;
+import alert.AlertFactory;
 import alert.AlertType;
 
 public class User {
 
-	String login;
-	String lastName;
-	String firstName;
-	ArrayList<Bid> ownedBids = null;
-	Date deadline;
+	private String login;
+	private String lastName;
+	private String firstName;
+	private ArrayList<Bid> ownedBids = null;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
@@ -21,98 +21,111 @@ public class User {
 		this.login = login;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.ownedBids = null;
+		this.ownedBids = new ArrayList <Bid> ();
 	}
 
+	
+	// TODO: date de creation = today ?
 	// create a bid without any reservedPrice
-	public Bid createBid (Item item, int nbDay, float minPrice)
-	{
-		Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
 
-		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
+	public boolean createBid (Item item, int nbDay, float minPrice)
+	{
 		//TODO : quelle valeur pour le reservePrice ˆ minPrice ?
-		return newBid;
+
+		if(item != null && nbDay > 0 && minPrice >= 0)
+		{
+			Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+
+			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
+			this.ownedBids.add(newBid);
+			
+			if(newBid != null)
+				return true;
+		}
+		
+		return false;
+	}
+
+	// create a bid with a reservedPrice
+	public boolean createBid (Item item, int nbDay, float minPrice, float reservedPrice)
+	{
+		// checks validity of parameters
+		if(item != null && nbDay > 0 && minPrice >= 0 && reservedPrice >= minPrice)
+		{
+			Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+			
+			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
+			this.ownedBids.add(newBid);
+			
+			if(newBid != null)
+				return true;
+		}
+		
+		return false;
 	}
 	
-	// create a bid with a reservedPrice
-	public Bid createBid (Item item, int nbDay, float minPrice, float reservedPrice)
-	{
-		Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
-		
-		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
-		return newBid;
-	}
+	
 	
 	// removes a bid
-	public Bid cancelBid (Bid bid)
+	public boolean cancelBid (Bid bid)
 	{
-		for(Bid bidToCancel : ownedBids) {
-		    if(bidToCancel == bid){
-		    	bidToCancel.setState(BidState.CANCELED);
-		    }
-		}
-		return bid;
+		return bid.setState(BidState.CANCELED, this);
 	}
 	
 	// publish a bid
-	public Bid publishBid (Bid bid)
+	public boolean publishBid (Bid bid)
 	{
-		for(Bid bidToPublish : ownedBids) {
-		    if(bidToPublish == bid){
-		    	bidToPublish.setState(BidState.PUBLISHED);
-		    }
-		}
-		return bid;
+		return bid.setState(BidState.PUBLISHED, this);
 	}
 	
 	// unpublish a bid = hide a bid
-	public Bid hideBid (Bid bid)
+	public boolean hideBid (Bid bid)
 	{
-		for(Bid bidToHide : ownedBids) {
-		    if(bidToHide == bid){
-		    	bidToHide.setState(BidState.CREATED);
-		    }
-		}
-		return bid;
+		return bid.setState(BidState.CREATED, this);
 	}
 	
 	// change the reservedPrice of a bid
 	public boolean setReservedPrice (float reservedPrice, Bid bid)
 	{
-		for(Bid bidToEdit : ownedBids) {
-		    if(bidToEdit == bid){
-		    	bidToEdit.setReservedPrice(reservedPrice);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setReservedPrice(reservedPrice, this);
 	}
 	
 	// change the minPrice of a bid
 	public boolean setMinPrice (float minPrice, Bid bid)
 	{
-		for(Bid bidToEdit : ownedBids) {
-		    if(bidToEdit == bid){
-		    	bidToEdit.setMinPrice(minPrice);
-		    	return true;
-		    }
+		return bid.setMinPrice(minPrice, this);
+	}
+	
+	// make an offer on a bid
+	public boolean makeOffer (Bid bid, float price)
+	{
+		// checks if the user is not the bid's owner
+		for(Bid ownedBid : ownedBids)
+		{
+			if(ownedBid == bid)
+				return false;
+		}
+		// if not, checks validity of parameters
+		if(bid != null && price > 0)
+		{
+			Offer newOffer = new Offer(this, price, bid);
+			if(newOffer != null)
+				return true;
 		}
 		return false;
 	}
 	
-	// make an offer on a bid
-	public Offer makeOffer (Bid bid, float price)
-	{
-		Offer newOffer = new Offer(this, price, bid);
-		return newOffer;
-	}
-	
 	// creates an alert on a bid
-	public Alert createAlert (Bid bid, AlertType alertType)
+	public boolean createAlert (Bid bid, AlertType alertType)
 	{
-		Alert newAlert = Alert.factory(this, bid, alertType);
-		// TODO ce sera peu etre pas "factory"
-		return newAlert;
+		// checks validity of parameters
+		if(bid != null && AlertType.checkValidity(alertType))
+		{
+			Alert newAlert = AlertFactory.structureAlert(this, bid, alertType);
+			if(newAlert != null)
+				return true;
+		}
+		return false;
 	}
 	
 	//getter

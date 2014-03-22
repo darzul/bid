@@ -17,20 +17,15 @@ public abstract class Alert {
 		this.bid = bid;
 		this.type = type;
 	}
-	
-	public static Alert factory(User user, Bid bid, AlertType alertType){
-		// TODO
-		return null;
-	}
 
 	protected abstract boolean trigger ();
 	
-	public List<Alert> getAlerts (User user)
+	public static List<Alert> getAlerts (User user)
 	{
 		return alerts;
 	}
 	
-	public List<Alert> getAlerts (Bid bid)
+	public static List<Alert> getAlerts (Bid bid)
 	{
 		return alerts;
 	}
