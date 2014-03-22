@@ -15,7 +15,7 @@ public class Bid {
 	private float reservedPrice;
 	private Item item;
 	private User seller;
-	private Offer lastOffer;
+	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
 	static private ArrayList<Bid> bids;
 	
@@ -27,44 +27,58 @@ public class Bid {
 		this.minPrice = minPrice;
 		this.reservedPrice = reservedPrice;
 		this.seller = seller;
-		this.lastOffer = new Offer(minPrice, this);
+		this.bestOffer = null;
 	}
 	
 	
 	// ---------------
-	// lastOffer access
+	// bestOffer access
 	// ---------------
 	// getter simple
-	// returns the lastOffer if it was allowed, null if not
-	public Offer getLastOffer()
+	// returns the bestOffer if it was allowed, null if not
+	public Offer getBestOffer()
 	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
-			return this.lastOffer;
+			return this.bestOffer;
 		return null;
 	}
 	// getter with authentification
-	// returns the lastOffer if it was allowed, null if not
-	public Offer getLastOffer(User user)
+	// returns the bestOffer if it was allowed, null if not
+	public Offer getBestOffer(User user)
 	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED
 				|| this.seller == user)
-			return this.lastOffer;
+			return this.bestOffer;
 		for(Offer offer : previousOffers) {
 		    if(offer.user == user && this.state == BidState.CANCELED)
-		    	return this.lastOffer;
+		    	return this.bestOffer;
 		}
 		return null;
 	}
 	// setter
 	// returns true if it was allowed, false if not
-	public boolean setLastOffer(Offer newOffer)
+	public boolean setBestOffer(Offer newOffer)
 	{
-		if(newOffer.price > this.lastOffer.price
+		// to be applied, the new offer should :
+		// - be higher than the last offer
+		// - be higher the the minimum price
+		// - be set on a published bid
+		// - have a associated user
+		if(this.bestOffer == null
+				&& newOffer.price > this.minPrice
 				&& this.state == BidState.PUBLISHED
 				&& newOffer.user != null){
-			this.lastOffer = newOffer;
+			this.bestOffer = newOffer;
+			this.previousOffers.add(newOffer);
+			return true;
+		}
+		if(newOffer.price > this.bestOffer.price
+				&& newOffer.price > this.minPrice
+				&& this.state == BidState.PUBLISHED
+				&& newOffer.user != null){
+			this.bestOffer = newOffer;
 			this.previousOffers.add(newOffer);
 			return true;
 		}
@@ -180,8 +194,19 @@ public class Bid {
 	// returns true if it was allowed, false if not
 	public boolean setState(BidState newState, User user)
 	{
-		if(this.seller == user &&
-				(this.state == BidState.CREATED || this.state == BidState.PUBLISHED)){
+		// to change the state from outside :
+		// - the user must be the seller
+		// - the current state must be different from CANCELED or ENDED
+		if(!(this.seller == user) || this.state.equals(BidState.CANCELED) || this.state.equals(BidState.ENDED))
+			return false;
+		// if the seller wants to cancel or hide a bid :
+		// - it must have not reach the reservedPrice
+		if((newState.equals(BidState.CANCELED) || newState.equals(BidState.CREATED)) && bestOffer.price >= this.reservedPrice){
+			this.state = newState;
+			return true;
+		}
+		// you can always publish a bid
+		if(newState.equals(BidState.PUBLISHED)){
 			this.state = newState;
 			return true;
 		}
@@ -192,13 +217,11 @@ public class Bid {
 	// ---------------
 	// minPrice access
 	// ---------------
-	// getter with authentification
-	// returns the minPrice if it was allowed, -1 in not
-	public float getMinPrice(User user)
+	// getter simple
+	// returns the minPrice
+	public float getMinPrice()
 	{
-		if(this.seller == user)
-			return minPrice;
-		return -1;
+		return minPrice;
 	}
 	// setter with authentification
 	// returns true if it was allowed, false if not
