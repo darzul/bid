@@ -25,16 +25,20 @@ public class User {
 	}
 
 	// create a bid without any reservedPrice
-	public Bid createBid (Item item, Date deadLine, float minPrice)
+	public Bid createBid (Item item, int nbDay, float minPrice)
 	{
+		Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+
 		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
 		//TODO : quelle valeur pour le reservePrice ˆ minPrice ?
 		return newBid;
 	}
 	
 	// create a bid with a reservedPrice
-	public Bid createBid (Item item, Date deadLine, float minPrice, float reservedPrice)
+	public Bid createBid (Item item, int nbDay, float minPrice, float reservedPrice)
 	{
+		Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+		
 		Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
 		return newBid;
 	}

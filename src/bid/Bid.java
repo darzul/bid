@@ -17,7 +17,7 @@ public class Bid {
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
 			float reservedPrice, User seller) {
-		super();
+
 		this.deadLine = deadLine;
 		this.state = state;
 		this.minPrice = minPrice;
