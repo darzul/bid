@@ -30,7 +30,7 @@ public class Bid {
 		this.lastOffer = new Offer(minPrice, this);
 	}
 	
-	// getter
+	// getter with authentification
 	// returns the date if it was allowed, null if not
 	public Offer getLastOffer(User user){
 		if(this.seller == user)
@@ -73,17 +73,22 @@ public class Bid {
 			return null;
 	}
 	
-	// setter
-	public void setDeadLine(Date deadLine) {
-		this.deadLine = deadLine;
+	// setter with authentification
+	public boolean setDeadLine(Date deadLine, User user) {
+		if(this.seller == user && this.state == BidState.CREATED){
+			// TODO: cdt d'acceptation : peut-on changer la deadline d'une enchere en cours ?
+			this.deadLine = deadLine;
+			return true;
+		}
+		return false;
 	}
 
-	// getter
+	// getter shortcut
 	public int getItemId() {
 		return this.item.getId();
 	}
 	
-	// getter
+	// getter shortcut
 	public String getItemDescription() {
 		return this.item.getDescription();
 	}
