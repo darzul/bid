@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import alert.Alert;
+import alert.AlertFactory;
 import alert.AlertType;
 
 public class User {
@@ -105,8 +106,7 @@ public class User {
 	// creates an alert on a bid
 	public Alert createAlert (Bid bid, AlertType alertType)
 	{
-		Alert newAlert = Alert.factory(this, bid, alertType);
-		// TODO ce sera peu etre pas "factory"
+		Alert newAlert = AlertFactory.structureAlert(this, bid, alertType);
 		return newAlert;
 	}
 	

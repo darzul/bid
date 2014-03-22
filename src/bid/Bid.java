@@ -2,6 +2,9 @@ package bid;
 
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.List;
+
+import alert.Alert;
 
 public class Bid {
 
@@ -76,10 +79,13 @@ public class Bid {
 		this.reservedPrice = reservedPrice;
 	}
 
-	// search alerts corresponding to the last event
-	private void checkAlerts ()
+	// search alerts corresponding to the last event and triggers it
+	private void checkAlerts()
 	{
-		
+		List<Alert> alerts = Alert.getAlerts(this);
+		for(Alert alert : alerts) {
+			// TODO
+		}
 	}
 	
 	// search for all the bids owned by a user in the bid list
