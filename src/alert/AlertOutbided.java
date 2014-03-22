@@ -14,7 +14,7 @@ public class AlertOutbided extends Alert {
 	@Override
 	protected boolean trigger()
 	{
-		String mess = "For the bid "+ bid.getItemId() + ", an upper offer has been made.";
+		String mess = "For the bid "+ bid.getItem().getId() + ", an upper offer has been made.";
 		sendMessage(this.user, mess);
 		
 		return true;

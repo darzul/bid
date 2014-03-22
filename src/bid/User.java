@@ -43,61 +43,31 @@ public class User {
 	// removes a bid
 	public boolean cancelBid (Bid bid)
 	{
-		for(Bid bidToCancel : ownedBids) {
-		    if(bidToCancel == bid){
-		    	bidToCancel.setState(BidState.CANCELED);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setState(BidState.CANCELED, this);
 	}
 	
 	// publish a bid
 	public boolean publishBid (Bid bid)
 	{
-		for(Bid bidToPublish : ownedBids) {
-		    if(bidToPublish == bid){
-		    	bidToPublish.setState(BidState.PUBLISHED);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setState(BidState.PUBLISHED, this);
 	}
 	
 	// unpublish a bid = hide a bid
 	public boolean hideBid (Bid bid)
 	{
-		for(Bid bidToHide : ownedBids) {
-		    if(bidToHide == bid){
-		    	bidToHide.setState(BidState.CREATED);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setState(BidState.CREATED, this);
 	}
 	
 	// change the reservedPrice of a bid
 	public boolean setReservedPrice (float reservedPrice, Bid bid)
 	{
-		for(Bid bidToEdit : ownedBids) {
-		    if(bidToEdit == bid){
-		    	bidToEdit.setReservedPrice(reservedPrice);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setReservedPrice(reservedPrice, this);
 	}
 	
 	// change the minPrice of a bid
 	public boolean setMinPrice (float minPrice, Bid bid)
 	{
-		for(Bid bidToEdit : ownedBids) {
-		    if(bidToEdit == bid){
-		    	bidToEdit.setMinPrice(minPrice);
-		    	return true;
-		    }
-		}
-		return false;
+		return bid.setMinPrice(minPrice, this);
 	}
 	
 	// make an offer on a bid

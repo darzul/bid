@@ -13,15 +13,15 @@ public class Bid {
 	private BidState state;
 	private float minPrice;
 	private float reservedPrice;
-	Item item;
+	private Item item;
 	private User seller;
 	private Offer lastOffer;
 	private HashSet<Offer> previousOffers;
 	static private ArrayList<Bid> bids;
 	
 	// constructor
-	public Bid(Date deadLine, BidState state, float minPrice,
-			float reservedPrice, User seller) {
+	public Bid(Date deadLine, BidState state, float minPrice, float reservedPrice, User seller)
+	{
 		this.deadLine = deadLine;
 		this.state = state;
 		this.minPrice = minPrice;
@@ -30,18 +30,37 @@ public class Bid {
 		this.lastOffer = new Offer(minPrice, this);
 	}
 	
-	// getter with authentification
-	// returns the date if it was allowed, null if not
-	public Offer getLastOffer(User user){
-		if(this.seller == user)
-			return lastOffer;
-		else
-			return null;
+	
+	// ---------------
+	// lastOffer access
+	// ---------------
+	// getter simple
+	// returns the lastOffer if it was allowed, null if not
+	public Offer getLastOffer()
+	{
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED)
+			return this.lastOffer;
+		return null;
 	}
-
+	// getter with authentification
+	// returns the lastOffer if it was allowed, null if not
+	public Offer getLastOffer(User user)
+	{
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED
+				|| this.seller == user)
+			return this.lastOffer;
+		for(Offer offer : previousOffers) {
+		    if(offer.user == user && this.state == BidState.CANCELED)
+		    	return this.lastOffer;
+		}
+		return null;
+	}
 	// setter
 	// returns true if it was allowed, false if not
-	public boolean setLastOffer(Offer newOffer) {
+	public boolean setLastOffer(Offer newOffer)
+	{
 		if(newOffer.price > this.lastOffer.price
 				&& this.state == BidState.PUBLISHED
 				&& newOffer.user != null){
@@ -52,86 +71,184 @@ public class Bid {
 		return false;
 	}
 
+	
+	// ---------------
+	// deadLine access
+	// ---------------
 	// getter simple
 	// returns the date if it was allowed, null if not
-	public Date getDeadLine() {
+	public Date getDeadLine()
+	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
-			return deadLine;
-		else
-			return null;
+			return this.deadLine;
+		return null;
 	}
-	
 	// getter with authentification
 	// returns the date if it was allowed, null if not
-	public Date getDeadLine(User user) {
+	public Date getDeadLine(User user)
+	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED
 				|| this.seller == user)
-			return deadLine;
-		else
-			return null;
+			return this.deadLine;
+		for(Offer offer : previousOffers) {
+		    if(offer.user == user && this.state == BidState.CANCELED)
+		    	return this.deadLine;
+		}
+		return null;
 	}
-	
 	// setter with authentification
-	public boolean setDeadLine(Date deadLine, User user) {
+	// returns true if it was allowed, false if not
+	public boolean setDeadLine(Date newDeadLine, User user)
+	{
 		if(this.seller == user && this.state == BidState.CREATED){
-			// TODO: cdt d'acceptation : peut-on changer la deadline d'une enchere en cours ?
-			this.deadLine = deadLine;
+			this.deadLine = newDeadLine;
 			return true;
 		}
 		return false;
 	}
 
-	// getter shortcut
-	public int getItemId() {
-		return this.item.getId();
-	}
 	
-	// getter shortcut
-	public String getItemDescription() {
-		return this.item.getDescription();
-	}
-
-	// getter
-	public BidState getState() {
-		return state;
-	}
-
-	// setter
-	public void setState(BidState state) {
-		this.state = state;
-	}
-
-	//getter
-	public float getMinPrice() {
-		return minPrice;
-	}
-
-	// setter
-	public void setMinPrice(float minPrice) {
-		this.minPrice = minPrice;
-	}
-
-	// getter
-	public float getReservedPrice() {
-		return reservedPrice;
-	}
-
-	// setter
-	public void setReservedPrice(float reservedPrice) {
-		this.reservedPrice = reservedPrice;
-	}
-
-	// search alerts corresponding to the last event and triggers it
-	private void checkAlerts()
+	// ---------------
+	// item access
+	// ---------------
+	// getter simple
+	// returns the item if it was allowed, null if not
+	public Item getItem()
 	{
-		List<Alert> alerts = Alert.getAlerts(this);
-		for(Alert alert : alerts) {
-			// TODO
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED)
+			return this.item;
+		return null;
+	}
+	// getter with authentification
+	// returns the item if it was allowed, null if not
+	public Item getItem(User user)
+	{
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED
+				|| this.seller == user)
+			return this.item;
+		for(Offer offer : previousOffers) {
+		    if(offer.user == user && this.state == BidState.CANCELED)
+		    	return this.item;
 		}
+		return null;
 	}
 	
+	
+	// ---------------
+	// seller access
+	// ---------------
+	// getter simple
+	// returns the seller if it was allowed, null if not
+	public User getSeller()
+	{
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED)
+			return this.seller;
+		return null;
+	}
+	// getter with authentification
+	// returns the seller if it was allowed, null if not
+	public User getSeller(User user)
+	{
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED
+				|| this.seller == user)
+			return this.seller;
+		for(Offer offer : previousOffers) {
+		    if(offer.user == user && this.state == BidState.CANCELED)
+		    	return this.seller;
+		}
+		return null;
+	}
+	
+
+	// ------------
+	// state access
+	// ------------
+	// getter with authentification
+	public BidState getState(User user)
+	{
+		if(this.seller == user)
+			return state;
+		return null;
+	}
+	// setter
+	// returns true if it was allowed, false if not
+	public boolean setState(BidState newState, User user)
+	{
+		if(this.seller == user &&
+				(this.state == BidState.CREATED || this.state == BidState.PUBLISHED)){
+			this.state = newState;
+			return true;
+		}
+		return false;
+	}
+	
+	
+	// ---------------
+	// minPrice access
+	// ---------------
+	// getter with authentification
+	// returns the minPrice if it was allowed, -1 in not
+	public float getMinPrice(User user)
+	{
+		if(this.seller == user)
+			return minPrice;
+		return -1;
+	}
+	// setter with authentification
+	// returns true if it was allowed, false if not
+	public boolean setMinPrice(float minPrice, User user)
+	{
+		if(user == this.seller && this.state == BidState.CREATED){
+			this.minPrice = minPrice;
+			return true;
+		}
+		return false;
+	}
+	
+	
+	// -------------------
+	// reservedPrice acces
+	// -------------------
+	// getter with authentification
+	// returns the reservedPrice if it was allowed, -1 in not
+	public float getReservedPrice(User user)
+	{
+		if(this.seller == user)
+			return reservedPrice;
+		return -1;
+	}
+	// setter with authentification
+	// returns true if it was allowed, false if not
+	public boolean setReservedPrice(float reservedPrice, User user)
+	{
+		if(user == this.seller && this.state == BidState.CREATED){
+			this.reservedPrice = reservedPrice;
+			return true;
+		}
+		return false;
+	}
+	
+	// -------------------
+	// previousOffer acces
+	// -------------------
+	// get with authentification
+	// returns the list if it was allowed, null in not
+	public HashSet<Offer> getPreviousOffers(User user) {
+		if(user == this.seller)
+			return previousOffers;
+		return null;
+	}
+
+
+	// ----------
+	// bids acces
+	// ----------
 	// search for all the bids owned by a user in the bid list
 	static public ArrayList<Bid> getBids (User user)
 	{
@@ -143,4 +260,15 @@ public class Bid {
 		}
 		return ownedBids;
 	}
+	
+	
+	// search alerts corresponding to the last event and triggers it
+	private void checkAlerts()
+	{
+		List<Alert> alerts = Alert.getAlerts(this);
+		for(Alert alert : alerts) {
+			// TODO
+		}
+	}
+	
 }

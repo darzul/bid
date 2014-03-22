@@ -14,7 +14,7 @@ public class AlertSeller extends Alert {
 	@Override
 	protected boolean trigger() 
 	{
-		String mess = "An offer has been made for your bid "+ bid.getItemId() + ".";
+		String mess = "An offer has been made for your bid "+ bid.getItem().getId() + ".";
 		sendMessage(this.user, mess);
 		
 		return true;

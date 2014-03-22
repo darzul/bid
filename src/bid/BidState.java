@@ -1,10 +1,10 @@
 package bid;
 
 public enum BidState {
-	CREATED, // can't be accessed + viewed by other users
-	PUBLISHED, // can be accessed + viewed by other users
-	ENDED, // can be viewed (but not accessed) by users who made an offer
-	CANCELED; // can't be viewed (nor accessed) by other users
+	CREATED,	// can be viewed by owner
+	PUBLISHED,	// can be viewed by owner and every other users
+	ENDED,		// can be viewed by owner and every other users
+	CANCELED;	// can be viewed by owner and users who made an offer
 }
 
 // TODO:
