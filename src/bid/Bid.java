@@ -2,6 +2,7 @@ package bid;
 
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import alert.Alert;
@@ -15,23 +16,66 @@ public class Bid {
 	Item item;
 	private User seller;
 	private Offer lastOffer;
+	private HashSet<Offer> previousOffers;
 	static private ArrayList<Bid> bids;
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
 			float reservedPrice, User seller) {
-		super();
 		this.deadLine = deadLine;
 		this.state = state;
 		this.minPrice = minPrice;
 		this.reservedPrice = reservedPrice;
 		this.seller = seller;
-		this.lastOffer = null;
+		this.lastOffer = new Offer(minPrice, this);
 	}
 	
 	// getter
+	// returns the date if it was allowed, null if not
+	public Offer getLastOffer(User user){
+		if(this.seller == user)
+			return lastOffer;
+		else
+			return null;
+	}
+
+	// setter
+	// returns true if it was allowed, false if not
+	public boolean setLastOffer(Offer newOffer) {
+		if(newOffer.price > this.lastOffer.price
+				&& this.state == BidState.PUBLISHED
+				&& newOffer.user != null){
+			this.lastOffer = newOffer;
+			this.previousOffers.add(newOffer);
+			return true;
+		}
+		return false;
+	}
+
+	// getter simple
+	// returns the date if it was allowed, null if not
 	public Date getDeadLine() {
-		return deadLine;
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED)
+			return deadLine;
+		else
+			return null;
+	}
+	
+	// getter with authentification
+	// returns the date if it was allowed, null if not
+	public Date getDeadLine(User user) {
+		if(this.state == BidState.PUBLISHED
+				|| this.state == BidState.ENDED
+				|| this.seller == user)
+			return deadLine;
+		else
+			return null;
+	}
+	
+	// setter
+	public void setDeadLine(Date deadLine) {
+		this.deadLine = deadLine;
 	}
 
 	// getter
@@ -42,11 +86,6 @@ public class Bid {
 	// getter
 	public String getItemDescription() {
 		return this.item.getDescription();
-	}
-
-	// setter
-	public void setDeadLine(Date deadLine) {
-		this.deadLine = deadLine;
 	}
 
 	// getter

@@ -10,11 +10,11 @@ import alert.AlertType;
 
 public class User {
 
-	String login;
-	String lastName;
-	String firstName;
-	ArrayList<Bid> ownedBids = null;
-	Date deadline;
+	private String login;
+	private String lastName;
+	private String firstName;
+	private ArrayList<Bid> ownedBids = null;
+	private Date deadline;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
@@ -41,36 +41,39 @@ public class User {
 	}
 	
 	// removes a bid
-	public Bid cancelBid (Bid bid)
+	public boolean cancelBid (Bid bid)
 	{
 		for(Bid bidToCancel : ownedBids) {
 		    if(bidToCancel == bid){
 		    	bidToCancel.setState(BidState.CANCELED);
+		    	return true;
 		    }
 		}
-		return bid;
+		return false;
 	}
 	
 	// publish a bid
-	public Bid publishBid (Bid bid)
+	public boolean publishBid (Bid bid)
 	{
 		for(Bid bidToPublish : ownedBids) {
 		    if(bidToPublish == bid){
 		    	bidToPublish.setState(BidState.PUBLISHED);
+		    	return true;
 		    }
 		}
-		return bid;
+		return false;
 	}
 	
 	// unpublish a bid = hide a bid
-	public Bid hideBid (Bid bid)
+	public boolean hideBid (Bid bid)
 	{
 		for(Bid bidToHide : ownedBids) {
 		    if(bidToHide == bid){
 		    	bidToHide.setState(BidState.CREATED);
+		    	return true;
 		    }
 		}
-		return bid;
+		return false;
 	}
 	
 	// change the reservedPrice of a bid
