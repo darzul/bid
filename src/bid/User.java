@@ -14,6 +14,7 @@ public class User {
 	String lastName;
 	String firstName;
 	ArrayList<Bid> ownedBids = null;
+	Date deadline;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
