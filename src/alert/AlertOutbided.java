@@ -12,10 +12,10 @@ public class AlertOutbided extends Alert {
 	}
 
 	@Override
-	protected boolean trigger()
+	public boolean trigger()
 	{
-		String mess = "For the bid "+ bid.getItem().getId() + ", an upper offer has been made.";
-		sendMessage(this.user, mess);
+		String mess = "For the bid "+ getBid().getItem().getId() + ", an upper offer has been made.";
+		sendMessage(mess);
 		
 		return true;
 	}

@@ -41,4 +41,15 @@ public class BidManager {
 		}
 		return publishedBids;
 	}
+
+	public boolean addBid(Bid newBid) {
+		return this.bids.add(newBid);
+	}
+	
+	public boolean deleteBid (Bid bid, User user) {
+		if (user != bid.getSeller())
+			return false;
+		
+		return bids.remove(bid);	
+	}
 }

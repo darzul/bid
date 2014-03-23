@@ -12,10 +12,10 @@ public class AlertBidCanceled extends Alert {
 	}
 
 	@Override
-	protected boolean trigger() 
+	public boolean trigger() 
 	{
-		String mess = "The bid "+ bid.getItem().getId() + " is canceled.";
-		sendMessage(this.user, mess);
+		String mess = "The bid "+ getBid().getItem().getId() + " is canceled.";
+		sendMessage(mess);
 		
 		return true;
 	}

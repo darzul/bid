@@ -7,6 +7,7 @@ import java.util.List;
 
 import alert.Alert;
 import alert.AlertManager;
+import alert.AlertType;
 
 public class Bid {
 
@@ -18,7 +19,6 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
-	static private ArrayList<Bid> bids = new ArrayList<Bid>();
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
@@ -30,14 +30,6 @@ public class Bid {
 		this.seller = seller;
 		this.bestOffer = null;
 		this.previousOffers = new HashSet<Offer>();
-		bids.add(this);
-	}
-	
-	// debug
-	// please don't use it for bad things :)
-	static public void clearBid()
-	{
-		bids.clear();
 	}
 	
 	// ---------------
@@ -176,7 +168,8 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the seller if it was allowed, null if not
-	public User getSeller()
+	//TODO: WTF ?
+/*	bid.getSeller()
 	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
@@ -197,7 +190,10 @@ public class Bid {
 		}
 		return null;
 	}
-	
+*/
+	public User getSeller() {
+		return this.seller;
+	}
 
 	// ------------
 	// state access
@@ -220,13 +216,32 @@ public class Bid {
 	public boolean setState(BidState newState, User user)
 	{
 		// to change the state from outside :
+		//   - the user must be the seller
+		if(this.seller != user){
+			return false;
+		}
+		
+		if (newState.equals(BidState.CANCELED)){
+			
+			ArrayList <Alert> alerts = AlertManager.getInstance().getAlerts(this);
+			for (Alert alert: alerts){
+				if (alert.getType().equals(AlertType.BIDCANCELED)){
+					alert.trigger();
+				}
+			}
+			
+			BidManager.getInstance().deleteBid(this, user);
+			
+			return true;
+		 }
+		// to change the state from outside :
 		// - the user must be the seller
-		// - the current state must be different from CANCELED or ENDED
-		if(!(this.seller == user) || this.state.equals(BidState.CANCELED) || this.state.equals(BidState.ENDED))
+		// - the current state must be different from ENDED
+		if(!(this.seller == user) || this.state.equals(BidState.ENDED))
 			return false;
 		// if the seller wants to cancel or hide a bid :
 		// - it must have not reach the reservedPrice
-		if((newState.equals(BidState.CANCELED) || newState.equals(BidState.CREATED)) && bestOffer.getPrice() >= this.reservedPrice){
+		if((newState.equals(BidState.CREATED)) && bestOffer.getPrice() >= this.reservedPrice){
 			this.state = newState;
 			return true;
 		}
