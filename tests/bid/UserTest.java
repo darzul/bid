@@ -16,9 +16,7 @@ public class UserTest {
 	private User buyer;
 	private User seller;
 	private Bid bid;
-	
-	private static final double DELTA = 1e-15;
-	
+		
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
@@ -55,7 +53,6 @@ public class UserTest {
 	@Test
 	public void getReservedPriceToSellerTest() {
 		assertTrue( bid.getReservedPrice(seller) == 200 );
-		//assertEquals(200, bid.getReservedPrice(seller), DELTA);
 	}
 	
 	@Test
