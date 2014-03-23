@@ -25,12 +25,9 @@ public class User {
 	}
 
 	
-	// TODO: date de creation = today ?
 	// create a bid without any reservedPrice
 	public boolean createBid (Item item, int nbDay, float minPrice)
 	{
-		//TODO : quelle valeur pour le reservePrice ˆ minPrice ?
-
 		if(item != null && nbDay > 0 && minPrice >= 0)
 		{
 			Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
