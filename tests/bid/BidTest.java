@@ -18,7 +18,8 @@ public class BidTest {
 	private User seller;
 	private User buyer1;
 	private User buyer2;
-	private Bid bid;
+	private Bid bidPublished;
+	private Bid bidUnpublished;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -27,7 +28,12 @@ public class BidTest {
 		
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100);
-		bid = seller.getOwnedBids().get(0);
+		seller.createBid(item, 10, 100);
+		
+		bidPublished = seller.getOwnedBids().get(0);
+		seller.publishBid(bidPublished);
+	
+		bidUnpublished = seller.getOwnedBids().get(0);
 		
 		buyer1 = new User("Karibou", "Bouvard","Franï¿½ois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
@@ -44,43 +50,42 @@ public class BidTest {
 	
 	@Test
 	public void seePublishedBidTest() {
-		bid.setState(BidState.PUBLISHED, seller);
 		assertEquals(1, Bid.getBids(buyer1).size());
 	}
 	
 	@Test
 	public void makeOfferTest() {
-		assertTrue(buyer1.makeOffer( this.bid, 500 ));
+		assertTrue(buyer1.makeOffer( this.bidPublished, 500 ));
 	}
 	
 	@Test
 	public void makeOfferOnHisOwnBidTest() {
-		assertFalse(seller.makeOffer( this.bid, 150 ));
+		assertFalse(seller.makeOffer( this.bidPublished, 150 ));
 	}
 	
 	@Test
-	public void makeOfferOnNotPublishedBidTest() {
-		seller.hideBid(bid);
-		assertFalse(buyer1.makeOffer( this.bid, 150 ));
+	public void makeOfferOnUnpublishedBidTest() {
+		assertFalse(buyer1.makeOffer( this.bidUnpublished, 150 ));
 	}
 	
 	@Test
 	public void makeOfferWithNegativePriceTest() {
-		assertFalse(buyer1.makeOffer( this.bid, -50 ));
+		assertFalse(buyer1.makeOffer( this.bidPublished, -50 ));
 	}
 	
 	@Test
 	public void makeOfferUnderMinPriceTest() {
-		assertFalse(buyer1.makeOffer( this.bid, 50 ));
+		// TODO: Il faut faire le test du prix > prix mini avant de créer l'offre
+		assertFalse(buyer1.makeOffer( this.bidPublished, 50 ));
 	}
 	
 	@Test
 	public void makeOfferUnderMaxOfferTest() {
-		assertFalse(buyer2.makeOffer( this.bid, 150 ));
+		assertFalse(buyer2.makeOffer( this.bidPublished, 150 ));
 	}
 
 	@Test
 	public void makeOfferOnOutdatedBidTest() {
-		assertFalse(buyer1.makeOffer( this.bid, 150 ));
+		assertFalse(buyer1.makeOffer( this.bidPublished, 150 ));
 	}
 }

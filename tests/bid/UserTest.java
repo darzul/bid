@@ -24,7 +24,7 @@ public class UserTest {
 		buyer = new User("DarzuL", "Bourderye", "Guillaume");
 		
 		seller = new User("Hoshiyo", "Guyen", "Anna");
-		seller.createBid(item, 10, 100);
+		seller.createBid(item, 10, 100, 200);
 		bid = seller.getOwnedBids().get(0);
 	}
 
@@ -59,7 +59,7 @@ public class UserTest {
 	
 	@Test
 	public void getReservedPriceToBuyerTest() {
-		assertTrue( bid.getReservedPrice(seller) == -1 );
+		assertTrue( bid.getReservedPrice(buyer) == -1 );
 	}	
 	
 	@Test
