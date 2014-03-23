@@ -17,11 +17,14 @@ public class UserTest {
 	private User seller;
 	private Bid bid;
 	
+	private static final double DELTA = 1e-15;
+	
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
-		item = new Item ();
+		item = new Item (0, "Un poney");
 		buyer = new User("DarzuL", "Bourderye", "Guillaume");
+		seller = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
 	@After
@@ -31,6 +34,7 @@ public class UserTest {
 	@Test
 	public void createBidWithoutReservedPriceTest() {
 		assertTrue(seller.createBid(item, 10, 100));
+		this.bid = seller.getOwnedBids().get(0);
 	}
 	
 	@Test
@@ -51,11 +55,12 @@ public class UserTest {
 	@Test
 	public void getReservedPriceToSellerTest() {
 		assertTrue( bid.getReservedPrice(seller) == 200 );
+		//assertEquals(200, bid.getReservedPrice(seller), DELTA);
 	}
 	
 	@Test
 	public void getReservedPriceToBuyerTest() {
-		assertFalse( bid.getReservedPrice(seller) == -1 );
+		assertTrue( bid.getReservedPrice(seller) == -1 );
 	}	
 	
 	@Test

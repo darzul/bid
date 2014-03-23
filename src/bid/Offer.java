@@ -6,9 +6,7 @@ public class Offer {
 	private float price;
 	private Bid bid;
 	private boolean applied = false;
-	
-	// TODO: pas besoin de private ? DONE
-	
+		
 	// constructor
 	public Offer(User user, float price, Bid bid) {
 		this.user = user;

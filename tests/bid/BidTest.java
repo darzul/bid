@@ -23,13 +23,13 @@ public class BidTest {
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
-		item = new Item ();
+		item = new Item (0, "Un poney");
 		
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100);
 		bid = seller.getOwnedBids().get(0);
 		
-		buyer1 = new User("Karibou", "Bouvard","François");
+		buyer1 = new User("Karibou", "Bouvard","Franï¿½ois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
