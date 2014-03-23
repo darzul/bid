@@ -20,7 +20,7 @@ public class AlertManager {
 		return alertInstance;
 	}
 	
-	public static ArrayList<Alert> getAlerts (User user)
+	public ArrayList<Alert> getAlerts (User user)
 	{
 		ArrayList<Alert> alertsToOneUser = new ArrayList<Alert>();
 		for(Alert alert : alerts)
@@ -33,7 +33,7 @@ public class AlertManager {
 		return alertsToOneUser;
 	}
 	
-	public static ArrayList<Alert> getAlerts (Bid bid)
+	public ArrayList<Alert> getAlerts (Bid bid)
 	{
 		ArrayList<Alert> alertsToOneBid = new ArrayList<Alert>();
 		for(Alert alert : alerts)

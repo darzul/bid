@@ -140,7 +140,7 @@ public class User {
 		return true;
 	}
 	
-	public int getNumberMessage(Stack<String> messages) {
+	public int getNumberMessage() {
 		return messages.size();
 	}
 }

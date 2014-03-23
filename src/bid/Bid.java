@@ -224,12 +224,13 @@ public class Bid {
 		if (newState.equals(BidState.CANCELED)){
 			
 			ArrayList <Alert> alerts = AlertManager.getInstance().getAlerts(this);
-			for (Alert alert: alerts){
-				if (alert.getType().equals(AlertType.BIDCANCELED)){
-					alert.trigger();
-				}
-			}
 			
+				for (Alert alert: alerts){
+					if (alert.getType().equals(AlertType.BIDCANCELED)){
+						System.err.println("LA");
+						alert.trigger();
+					}
+				}
 			BidManager.getInstance().deleteBid(this, user);
 			
 			return true;
@@ -312,7 +313,7 @@ public class Bid {
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{
-		List<Alert> alerts = AlertManager.getAlerts(this);
+		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		for(Alert alert : alerts) {
 			// TODO
 		}
