@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BidManager {
 	
 	private static BidManager bidInstance;
-	static private ArrayList<Bid> bids = new ArrayList<Bid>();
+	private ArrayList<Bid> bids = new ArrayList<Bid>();
 	
 	private BidManager () {
 	}
@@ -18,7 +18,7 @@ public class BidManager {
 	}
 	
 	// ----------
-	// bids acces
+	// bids access
 	// ----------
 	// search for all the bids owned by a user in the bid list
 	public ArrayList<Bid> getOwnedBids (User user)
@@ -32,7 +32,7 @@ public class BidManager {
 	}
 
 	// search for all the published bids
-	static public ArrayList<Bid> getPublishedBids ()
+	public ArrayList<Bid> getPublishedBids ()
 	{	
 		ArrayList<Bid> publishedBids = new ArrayList<Bid>();
 		for(Bid bid : bids) {
