@@ -2,29 +2,41 @@ package bid;
 
 public class Offer {
 
-	public User user;
-	public float price;
-	public Bid bid;
-	public boolean applied = false;
+	private User user;
+	private float price;
+	private Bid bid;
+	private boolean applied = false;
 	
-	// TODO: pas besoin de private ?
+	// TODO: pas besoin de private ? DONE
 	
 	// constructor
 	public Offer(User user, float price, Bid bid) {
 		this.user = user;
 		this.price = price;
 		this.bid = bid;
-		applyOffer();
+		
+		if (user != null && price > 0 && bid != null)
+		{
+			if(this.bid.setBestOffer(this) == false)
+			{
+				throw new IllegalArgumentException("Price too low or bid not published");
+			}
+		}
+		else {
+			throw new NullPointerException("User or Bid is NULL");
+		}
+			
 	}
 
-	private boolean applyOffer() {
-		if(this.bid.setBestOffer(this))
-		{
-			this.applied = true;
-			return true;
-		}
-		return false;
+	public boolean isApplied() {
+		return applied;
 	}
-	
-	
+
+	public float getPrice() {
+		return price;
+	}
+
+	public User getUser() {
+		return user;
+	}
 }

@@ -29,7 +29,7 @@ public class BidTest {
 		seller.createBid(item, 10, 100);
 		bid = seller.getOwnedBids().get(0);
 		
-		buyer1 = new User("Karibou", "Bouvard","François");
+		buyer1 = new User("Karibou", "Bouvard","FranÁois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
@@ -39,13 +39,13 @@ public class BidTest {
 	
 	@Test
 	public void seeNotPublishedBidTest() {
-		assertNull(Bid.getBids(buyer1));
+		assertEquals(0, Bid.getBids(buyer1).size());
 	}
 	
 	@Test
 	public void seePublishedBidTest() {
 		bid.setState(BidState.PUBLISHED, seller);
-		assertNotNull(Bid.getBids(buyer1));
+		assertEquals(1, Bid.getBids(buyer1).size());
 	}
 	
 	@Test
