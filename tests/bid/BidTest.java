@@ -35,7 +35,7 @@ public class BidTest {
 	
 		bidUnpublished = seller.getOwnedBids().get(0);
 		
-		buyer1 = new User("Karibou", "Bouvard","Fran�ois");
+		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 

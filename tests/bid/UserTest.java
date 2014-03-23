@@ -16,7 +16,7 @@ public class UserTest {
 	private User buyer;
 	private User seller;
 	private Bid bid;
-	
+
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
@@ -64,11 +64,11 @@ public class UserTest {
 	
 	@Test
 	public void getOwnedBidTest() {
-		assertEquals (1, buyer.getOwnedBids().size());
+		assertEquals (1, seller.getOwnedBids().size());
 	}
 	
 	@Test
 	public void createBidNegativePriceTest() {
-		assertNull (buyer.createBid(item, 10, -100));
+		assertFalse(buyer.createBid(item, 10, -100));
 	}
 }
