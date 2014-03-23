@@ -29,8 +29,15 @@ public class Bid {
 		this.seller = seller;
 		this.bestOffer = null;
 		this.previousOffers = new HashSet<Offer>();
+		bids.add(this);
 	}
 	
+	// debug
+	// plz don't use it for bad things :)
+	static public void clearBid()
+	{
+		bids.clear();
+	}
 	
 	// ---------------
 	// bestOffer access
@@ -284,13 +291,25 @@ public class Bid {
 	// bids acces
 	// ----------
 	// search for all the bids owned by a user in the bid list
-	static public ArrayList<Bid> getBids (User user)
+	static public ArrayList<Bid> getOwnedBids (User user)
 	{	
-		for(Bid bid : bids) {
+		ArrayList<Bid> ownedBids = new ArrayList<Bid>();
+		for(Bid bid : Bid.bids) {
 		    if(bid.seller == user)
-		    	bids.add(bid);
+		    	ownedBids.add(bid);
 		}
-		return bids;
+		return ownedBids;
+	}
+
+	// search for all the published bids
+	static public ArrayList<Bid> getPublishedBids ()
+	{	
+		ArrayList<Bid> publishedBids = new ArrayList<Bid>();
+		for(Bid bid : Bid.bids) {
+		    if(bid.state == BidState.PUBLISHED)
+		    	publishedBids.add(bid);
+		}
+		return publishedBids;
 	}
 	
 	

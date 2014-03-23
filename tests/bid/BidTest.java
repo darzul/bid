@@ -44,13 +44,8 @@ public class BidTest {
 	}
 	
 	@Test
-	public void seeNotPublishedBidTest() {
-		assertEquals(0, Bid.getBids(buyer1).size());
-	}
-	
-	@Test
 	public void seePublishedBidTest() {
-		assertEquals(1, Bid.getBids(buyer1).size());
+		assertEquals(1, Bid.getPublishedBids().size());
 	}
 	
 	@Test
@@ -75,7 +70,7 @@ public class BidTest {
 	
 	@Test
 	public void makeOfferUnderMinPriceTest() {
-		// TODO: Il faut faire le test du prix > prix mini avant de créer l'offre
+		// TODO: Il faut faire le test du prix > prix mini avant de crï¿½er l'offre
 		assertFalse(buyer1.makeOffer( this.bidPublished, 50 ));
 	}
 	

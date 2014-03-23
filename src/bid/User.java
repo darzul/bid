@@ -21,7 +21,7 @@ public class User {
 		this.login = login;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.ownedBids = new ArrayList <Bid> ();
+		this.ownedBids = new ArrayList<Bid>();
 	}
 
 	
@@ -102,7 +102,7 @@ public class User {
 				return false;
 		}
 		// if not, checks validity of parameters
-		if(bid != null && price > 0)
+		if(bid != null && price > bid.getMinPrice())
 		{
 			Offer newOffer = new Offer(this, price, bid);
 			if(newOffer != null)
