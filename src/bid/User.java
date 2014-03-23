@@ -16,9 +16,9 @@ public class User {
 	private String login;
 	private String lastName;
 	private String firstName;
-	private ArrayList<Bid> ownedBids = null;
 	//create stack to stock alert
 	private Stack<String> messages = new Stack<String>(); 
+	private ArrayList<Bid> ownedBids;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
@@ -26,13 +26,11 @@ public class User {
 		this.login = login;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.ownedBids = new ArrayList <Bid> ();
+		this.ownedBids = new ArrayList<Bid>();
 	}
 
 	
-	// TODO: date de creation = today ?
 	// create a bid without any reservedPrice
-
 	public boolean createBid (Item item, int nbDay, float minPrice)
 	{
 		//TODO : quelle valeur pour le reservePrice � minPrice ?
@@ -111,7 +109,7 @@ public class User {
 				return false;
 		}
 		// if not, checks validity of parameters
-		if(bid != null && price > 0)
+		if(bid != null && price > bid.getMinPrice())
 		{
 			Offer newOffer = new Offer(this, price, bid);
 			if(newOffer != null)

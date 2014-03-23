@@ -18,18 +18,24 @@ public class BidTest {
 	private User seller;
 	private User buyer1;
 	private User buyer2;
-	private Bid bid;
+	private Bid bidPublished;
+	private Bid bidUnpublished;
 	
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
-		item = new Item ();
+		item = new Item (0, "Un poney");
 		
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100);
-		bid = seller.getOwnedBids().get(0);
+		seller.createBid(item, 10, 100);
 		
-		buyer1 = new User("Karibou", "Bouvard","François");
+		bidPublished = seller.getOwnedBids().get(0);
+		seller.publishBid(bidPublished);
+	
+		bidUnpublished = seller.getOwnedBids().get(0);
+		
+		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
@@ -38,49 +44,43 @@ public class BidTest {
 	}
 	
 	@Test
-	public void seeNotPublishedBidTest() {
-		assertNull(Bid.getBids(buyer1));
-	}
-	
-	@Test
 	public void seePublishedBidTest() {
-		bid.setState(BidState.PUBLISHED, seller);
-		assertNotNull(Bid.getBids(buyer1));
+		assertEquals(1, Bid.getPublishedBids().size());
 	}
 	
 	@Test
 	public void makeOfferTest() {
-		assertTrue(buyer1.makeOffer( this.bid, 500 ));
+		assertTrue(buyer1.makeOffer( this.bidPublished, 500 ));
 	}
 	
 	@Test
 	public void makeOfferOnHisOwnBidTest() {
-		assertFalse(seller.makeOffer( this.bid, 150 ));
+		assertFalse(seller.makeOffer( this.bidPublished, 150 ));
 	}
 	
 	@Test
-	public void makeOfferOnNotPublishedBidTest() {
-		seller.hideBid(bid);
-		assertFalse(buyer1.makeOffer( this.bid, 150 ));
+	public void makeOfferOnUnpublishedBidTest() {
+		assertFalse(buyer1.makeOffer( this.bidUnpublished, 150 ));
 	}
 	
 	@Test
 	public void makeOfferWithNegativePriceTest() {
-		assertFalse(buyer1.makeOffer( this.bid, -50 ));
+		assertFalse(buyer1.makeOffer( this.bidPublished, -50 ));
 	}
 	
 	@Test
 	public void makeOfferUnderMinPriceTest() {
-		assertFalse(buyer1.makeOffer( this.bid, 50 ));
+		// TODO: Il faut faire le test du prix > prix mini avant de crï¿½er l'offre
+		assertFalse(buyer1.makeOffer( this.bidPublished, 50 ));
 	}
 	
 	@Test
 	public void makeOfferUnderMaxOfferTest() {
-		assertFalse(buyer2.makeOffer( this.bid, 150 ));
+		assertFalse(buyer2.makeOffer( this.bidPublished, 150 ));
 	}
 
 	@Test
 	public void makeOfferOnOutdatedBidTest() {
-		assertFalse(buyer1.makeOffer( this.bid, 150 ));
+		assertFalse(buyer1.makeOffer( this.bidPublished, 150 ));
 	}
 }

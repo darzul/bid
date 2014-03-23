@@ -17,7 +17,7 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
-	static private ArrayList<Bid> bids;
+	static private ArrayList<Bid> bids = new ArrayList<Bid>();
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
@@ -28,8 +28,16 @@ public class Bid {
 		this.reservedPrice = reservedPrice;
 		this.seller = seller;
 		this.bestOffer = null;
+		this.previousOffers = new HashSet<Offer>();
+		bids.add(this);
 	}
 	
+	// debug
+	// plz don't use it for bad things :)
+	static public void clearBid()
+	{
+		bids.clear();
+	}
 	
 	// ---------------
 	// bestOffer access
@@ -52,7 +60,7 @@ public class Bid {
 				|| this.seller == user)
 			return this.bestOffer;
 		for(Offer offer : previousOffers) {
-		    if(offer.user == user && this.state == BidState.CANCELED)
+		    if(offer.getUser() == user && this.state == BidState.CANCELED)
 		    	return this.bestOffer;
 		}
 		return null;
@@ -66,23 +74,33 @@ public class Bid {
 		// - be higher the the minimum price
 		// - be set on a published bid
 		// - have a associated user
-		if(this.bestOffer == null
-				&& newOffer.price > this.minPrice
+		if(this.bestOffer == null)
+		{
+			if (newOffer.getPrice() > this.minPrice
+					&& this.state == BidState.PUBLISHED
+					&& newOffer.getUser() != null){
+
+				this.bestOffer = newOffer;
+				this.previousOffers.add(newOffer);
+				
+				return true;
+			}
+			else
+				return false;
+		}
+		else {
+		if(newOffer.getPrice() > this.bestOffer.getPrice()
+				&& newOffer.getPrice() > this.minPrice
 				&& this.state == BidState.PUBLISHED
-				&& newOffer.user != null){
+				&& newOffer.getUser() != null){
 			this.bestOffer = newOffer;
 			this.previousOffers.add(newOffer);
+			
 			return true;
 		}
-		if(newOffer.price > this.bestOffer.price
-				&& newOffer.price > this.minPrice
-				&& this.state == BidState.PUBLISHED
-				&& newOffer.user != null){
-			this.bestOffer = newOffer;
-			this.previousOffers.add(newOffer);
-			return true;
+		else
+			return false;
 		}
-		return false;
 	}
 
 	
@@ -107,7 +125,7 @@ public class Bid {
 				|| this.seller == user)
 			return this.deadLine;
 		for(Offer offer : previousOffers) {
-		    if(offer.user == user && this.state == BidState.CANCELED)
+		    if(offer.getUser() == user && this.state == BidState.CANCELED)
 		    	return this.deadLine;
 		}
 		return null;
@@ -145,7 +163,7 @@ public class Bid {
 				|| this.seller == user)
 			return this.item;
 		for(Offer offer : previousOffers) {
-		    if(offer.user == user && this.state == BidState.CANCELED)
+		    if(offer.getUser() == user && this.state == BidState.CANCELED)
 		    	return this.item;
 		}
 		return null;
@@ -173,7 +191,7 @@ public class Bid {
 				|| this.seller == user)
 			return this.seller;
 		for(Offer offer : previousOffers) {
-		    if(offer.user == user && this.state == BidState.CANCELED)
+		    if(offer.getUser() == user && this.state == BidState.CANCELED)
 		    	return this.seller;
 		}
 		return null;
@@ -201,7 +219,7 @@ public class Bid {
 			return false;
 		// if the seller wants to cancel or hide a bid :
 		// - it must have not reach the reservedPrice
-		if((newState.equals(BidState.CANCELED) || newState.equals(BidState.CREATED)) && bestOffer.price >= this.reservedPrice){
+		if((newState.equals(BidState.CANCELED) || newState.equals(BidState.CREATED)) && bestOffer.getPrice() >= this.reservedPrice){
 			this.state = newState;
 			return true;
 		}
@@ -273,15 +291,25 @@ public class Bid {
 	// bids acces
 	// ----------
 	// search for all the bids owned by a user in the bid list
-	static public ArrayList<Bid> getBids (User user)
-	{
+	static public ArrayList<Bid> getOwnedBids (User user)
+	{	
 		ArrayList<Bid> ownedBids = new ArrayList<Bid>();
-		
-		for(Bid bid : bids) {
+		for(Bid bid : Bid.bids) {
 		    if(bid.seller == user)
 		    	ownedBids.add(bid);
 		}
 		return ownedBids;
+	}
+
+	// search for all the published bids
+	static public ArrayList<Bid> getPublishedBids ()
+	{	
+		ArrayList<Bid> publishedBids = new ArrayList<Bid>();
+		for(Bid bid : Bid.bids) {
+		    if(bid.state == BidState.PUBLISHED)
+		    	publishedBids.add(bid);
+		}
+		return publishedBids;
 	}
 	
 	
