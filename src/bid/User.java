@@ -3,12 +3,10 @@ package bid;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Stack;
 
 import alert.Alert;
 import alert.AlertFactory;
-import alert.AlertManager;
 import alert.AlertType;
 
 public class User {
@@ -145,5 +143,7 @@ public class User {
 	public ArrayList<Bid> getOwnedBids ()
 	{
 		return this.ownedBids;
-	}	
+	}
+	
+	
 }

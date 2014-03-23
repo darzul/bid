@@ -1,7 +1,5 @@
 package alert;
 
-import java.util.List;
-
 import bid.Bid;
 import bid.User;
 

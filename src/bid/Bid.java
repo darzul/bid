@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import alert.Alert;
+import alert.AlertManager;
 
 public class Bid {
 
@@ -33,7 +34,7 @@ public class Bid {
 	}
 	
 	// debug
-	// plz don't use it for bad things :)
+	// please don't use it for bad things :)
 	static public void clearBid()
 	{
 		bids.clear();
@@ -51,7 +52,7 @@ public class Bid {
 			return this.bestOffer;
 		return null;
 	}
-	// getter with authentification
+	// getter with authentication
 	// returns the bestOffer if it was allowed, null if not
 	public Offer getBestOffer(User user)
 	{
@@ -116,7 +117,7 @@ public class Bid {
 			return this.deadLine;
 		return null;
 	}
-	// getter with authentification
+	// getter with authentication
 	// returns the date if it was allowed, null if not
 	public Date getDeadLine(User user)
 	{
@@ -130,7 +131,7 @@ public class Bid {
 		}
 		return null;
 	}
-	// setter with authentification
+	// setter with authentication
 	// returns true if it was allowed, false if not
 	public boolean setDeadLine(Date newDeadLine, User user)
 	{
@@ -154,7 +155,7 @@ public class Bid {
 			return this.item;
 		return null;
 	}
-	// getter with authentification
+	// getter with authentication
 	// returns the item if it was allowed, null if not
 	public Item getItem(User user)
 	{
@@ -182,7 +183,7 @@ public class Bid {
 			return this.seller;
 		return null;
 	}
-	// getter with authentification
+	// getter with authentication
 	// returns the seller if it was allowed, null if not
 	public User getSeller(User user)
 	{
@@ -201,12 +202,10 @@ public class Bid {
 	// ------------
 	// state access
 	// ------------
-	// getter with authentification
-	public BidState getState(User user)
+	// getter with authentication
+	public BidState getState()
 	{
-		if(this.seller == user)
-			return state;
-		return null;
+		return state;
 	}
 	// setter
 	// returns true if it was allowed, false if not
@@ -241,7 +240,7 @@ public class Bid {
 	{
 		return minPrice;
 	}
-	// setter with authentification
+	// setter with authentication
 	// returns true if it was allowed, false if not
 	public boolean setMinPrice(float minPrice, User user)
 	{
@@ -254,9 +253,9 @@ public class Bid {
 	
 	
 	// -------------------
-	// reservedPrice acces
+	// reservedPrice access
 	// -------------------
-	// getter with authentification
+	// getter with authentication
 	// returns the reservedPrice if it was allowed, -1 in not
 	public float getReservedPrice(User user)
 	{
@@ -264,7 +263,7 @@ public class Bid {
 			return reservedPrice;
 		return -1;
 	}
-	// setter with authentification
+	// setter with authentication
 	// returns true if it was allowed, false if not
 	public boolean setReservedPrice(float reservedPrice, User user)
 	{
@@ -276,47 +275,21 @@ public class Bid {
 	}
 	
 	// -------------------
-	// previousOffer acces
+	// previousOffer access
 	// -------------------
-	// get with authentification
+	// get with authentication
 	// returns the list if it was allowed, null in not
 	public HashSet<Offer> getPreviousOffers(User user) {
 		if(user == this.seller)
 			return previousOffers;
 		return null;
 	}
-
-
-	// ----------
-	// bids acces
-	// ----------
-	// search for all the bids owned by a user in the bid list
-	static public ArrayList<Bid> getOwnedBids (User user)
-	{	
-		ArrayList<Bid> ownedBids = new ArrayList<Bid>();
-		for(Bid bid : Bid.bids) {
-		    if(bid.seller == user)
-		    	ownedBids.add(bid);
-		}
-		return ownedBids;
-	}
-
-	// search for all the published bids
-	static public ArrayList<Bid> getPublishedBids ()
-	{	
-		ArrayList<Bid> publishedBids = new ArrayList<Bid>();
-		for(Bid bid : Bid.bids) {
-		    if(bid.state == BidState.PUBLISHED)
-		    	publishedBids.add(bid);
-		}
-		return publishedBids;
-	}
 	
 	
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{
-		List<Alert> alerts = Alert.getAlerts(this);
+		List<Alert> alerts = AlertManager.getAlerts(this);
 		for(Alert alert : alerts) {
 			// TODO
 		}
