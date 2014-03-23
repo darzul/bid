@@ -3,9 +3,12 @@ package bid;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Stack;
 
 import alert.Alert;
 import alert.AlertFactory;
+import alert.AlertManager;
 import alert.AlertType;
 
 public class User {
@@ -13,6 +16,8 @@ public class User {
 	private String login;
 	private String lastName;
 	private String firstName;
+	//create stack to stock alert
+	private Stack<String> messages = new Stack<String>(); 
 	private ArrayList<Bid> ownedBids;
 	
 	// constructor
@@ -28,6 +33,8 @@ public class User {
 	// create a bid without any reservedPrice
 	public boolean createBid (Item item, int nbDay, float minPrice)
 	{
+		//TODO : quelle valeur pour le reservePrice � minPrice ?
+
 		if(item != null && nbDay > 0 && minPrice >= 0)
 		{
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
@@ -129,6 +136,16 @@ public class User {
 				return true;
 		}
 		return false;
+	}
+	
+	public boolean sendMessage(String mess) {
+		messages.push(mess);
+		
+		return true;
+	}
+	
+	public int getNumberMessage(Stack<String> messages) {
+		return messages.size();
 	}
 	
 	//getter
