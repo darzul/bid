@@ -14,10 +14,10 @@ public class AlertOutReservedPriceReached extends Alert {
 	}
 
 	@Override
-	protected boolean trigger()
+	public boolean trigger()
 	{
-		String mess = "The reserved price of the bid "+ bid.getItem().getId() + " is reached by an offer.";
-		sendMessage(this.user, mess);
+		String mess = "The reserved price of the bid "+ getBid().getItem().getId() + " is reached by an offer.";
+		sendMessage(mess);
 		
 		return true;
 	}

@@ -5,37 +5,48 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import alert.AlertType;
 
 public class UserTest {
 
-	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	private Item item;
-	private User buyer;
-	private User seller;
-	private Bid bid;
-
-	@Before
-	public void setUp() throws Exception {
+	private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private static Item item;
+	private static User seller;
+	private static User buyer;
+	private static Bid bid;
+	
+	@BeforeClass
+	public static void initialize() throws Exception {
 		System.setOut(new PrintStream(outContent));
 		item = new Item (0, "Un poney");
-		buyer = new User("DarzuL", "Bourderye", "Guillaume");
 		
-		seller = new User("Hoshiyo", "Guyen", "Anna");
+		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100, 200);
-		bid = seller.getOwnedBids().get(0);
-	}
-
-	@After
-	public void tearDown() throws Exception {
+		
+		bid = BidManager.getInstance().getOwnedBids(seller).get(0);
+		
+		buyer = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
 	@Test
 	// An user can create a bid without a reserved price
 	public void createBidWithoutReservedPriceTest() {
 		assertTrue(seller.createBid(item, 10, 100));
+	}
+	
+	@Test
+	// An user can't cancel a bid which owned to another user
+	public void cancelNoOwnedBidTest() {
+		assertFalse(buyer.cancelBid(BidManager.getInstance().getOwnedBids(seller).get(1)));
+	}
+	
+	@Test
+	// An user can cancel a his bid
+	public void cancelOwnedBidTest() {
+		assertTrue(seller.cancelBid(BidManager.getInstance().getOwnedBids(seller).get(0)));
 	}
 	
 	@Test
@@ -69,9 +80,9 @@ public class UserTest {
 	}	
 	
 	@Test
-	// An user can see his owned bid
+	// An user can get his owned bid
 	public void getOwnedBidTest() {
-		assertEquals (1, seller.getOwnedBids().size());
+		assertEquals (2, BidManager.getInstance().getOwnedBids(seller).size());
 	}
 	
 	@Test

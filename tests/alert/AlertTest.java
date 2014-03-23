@@ -5,59 +5,61 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import bid.Bid;
+import bid.BidManager;
 import bid.Item;
 import bid.User;
 
 public class AlertTest {
 
-	private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-	private Item item;
-	private User seller;
-	private User buyer1;
-	private User buyer2;
-	private Bid bid;
+	private static final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	private static Item item;
+	private static User seller;
+	private static User buyer1;
+	private static User buyer2;
+	private static Bid bid;
 	
-	@Before
-	public void setUp() throws Exception {
+	@BeforeClass
+	public static void initialize() throws Exception {
 		System.setOut(new PrintStream(outContent));
-		
 		item = new Item (0, "Un poney");
 		
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100);
-		bid = seller.getOwnedBids().get(0);
+		
+		bid = BidManager.getInstance().getOwnedBids(seller).get(0);
 		
 		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 
-	@After
-	public void tearDown() throws Exception {
+	@Test
+	// An user can create an Alert on not-owned bid
+	public void createAlertOnBidTest() {
+		assertTrue(buyer1.createAlert(bid, AlertType.BIDCANCELED));
 	}
-
+	
 	@Test
 	// An alert pop when an offer has been made on your owned bid
 	public void checkAlertSellerBidTest() {
-		buyer1.makeOffer( this.bid, 110 );
+		buyer1.makeOffer( bid, 110 );
 		assertTrue(outContent.toString().contains("An offer has been made for your bid"));
 	}
 
 	@Test
 	// An alert pop when the reserved price is reached
 	public void checkAlertOutReservedPriceReachedTest() {
-		buyer1.makeOffer( this.bid, 200 );
+		buyer1.makeOffer( bid, 200 );
 		assertTrue(outContent.toString().contains("The reserved price of the bid "));
 	}
 	
 	@Test
 	// An alert pop when an upper offer than your has been made
 	public void checkAlertOutBidedTest() {
-		buyer2.makeOffer( this.bid, 250 );
+		buyer2.makeOffer( bid, 250 );
 		assertTrue(outContent.toString().contains(", an upper offer has been made."));
 	}
 	

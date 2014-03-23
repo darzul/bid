@@ -1,7 +1,6 @@
 package alert;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import bid.Bid;
 import bid.User;
@@ -9,7 +8,7 @@ import bid.User;
 public class AlertManager {
 	
 	private static AlertManager alertInstance;
-	private static List<Alert> alerts;
+	private static ArrayList<Alert> alerts = new ArrayList <Alert> ();
 	
 	private AlertManager () {
 	}
@@ -21,12 +20,12 @@ public class AlertManager {
 		return alertInstance;
 	}
 	
-	public static List<Alert> getAlerts (User user)
+	public static ArrayList<Alert> getAlerts (User user)
 	{
 		ArrayList<Alert> alertsToOneUser = new ArrayList<Alert>();
 		for(Alert alert : alerts)
 		{
-			if(user == alert.user) {
+			if(user == alert.getUser()) {
 				alertsToOneUser.add(alert);
 			}
 		}
@@ -34,17 +33,20 @@ public class AlertManager {
 		return alertsToOneUser;
 	}
 	
-	public static List<Alert> getAlerts (Bid bid)
+	public static ArrayList<Alert> getAlerts (Bid bid)
 	{
 		ArrayList<Alert> alertsToOneBid = new ArrayList<Alert>();
 		for(Alert alert : alerts)
 		{
-			if(bid == alert.bid) {
+			if(bid == alert.getBid()) {
 				alertsToOneBid.add(alert);
 			}
 		}
-		
 		return alertsToOneBid;
+	}
+
+	public boolean addAlert(Alert newAlert) {
+		return alerts.add(newAlert);
 	}
 	
 }

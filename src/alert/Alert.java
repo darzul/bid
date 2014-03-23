@@ -5,20 +5,32 @@ import bid.User;
 
 public abstract class Alert {
 
-	User user;
-	Bid bid;
-	AlertType type;
+	private User user;
+	private Bid bid;
+	private AlertType alertType;
 	
 	public Alert(User user, Bid bid, AlertType alertType) {
 		this.user = user;
 		this.bid = bid;
-		this.type = alertType;
+		this.alertType = alertType;
 	}
 
-	protected abstract boolean trigger ();
+	public abstract boolean trigger ();
 	
-	public void sendMessage(User user, String mess)
+	public void sendMessage(String mess)
 	{
 		user.sendMessage(mess);
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public Bid getBid() {
+		return bid;
+	}
+
+	public AlertType getType() {
+		return alertType;
 	}
 }

@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import alert.Alert;
 import alert.AlertFactory;
+import alert.AlertManager;
 import alert.AlertType;
 
 public class User {
@@ -16,7 +17,6 @@ public class User {
 	private String firstName;
 	//create stack to stock alert
 	private Stack<String> messages = new Stack<String>(); 
-	private ArrayList<Bid> ownedBids;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
@@ -24,7 +24,6 @@ public class User {
 		this.login = login;
 		this.lastName = lastName;
 		this.firstName = firstName;
-		this.ownedBids = new ArrayList<Bid>();
 	}
 
 	
@@ -38,9 +37,8 @@ public class User {
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
-			this.ownedBids.add(newBid);
 			
-			if(newBid != null)
+			if(BidManager.getInstance().addBid(newBid))
 				return true;
 		}
 		
@@ -56,9 +54,8 @@ public class User {
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 			
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
-			this.ownedBids.add(newBid);
 			
-			if(newBid != null)
+			if(BidManager.getInstance().addBid(newBid))
 				return true;
 		}
 		
@@ -101,6 +98,7 @@ public class User {
 	public boolean makeOffer (Bid bid, float price)
 	{
 		// checks if the user is not the bid's owner
+		ArrayList <Bid> ownedBids = BidManager.getInstance().getOwnedBids(this); 
 		for(Bid ownedBid : ownedBids)
 		{
 			if(ownedBid == bid)
@@ -127,11 +125,11 @@ public class User {
 	public boolean createAlert (Bid bid, AlertType alertType)
 	{
 		// checks validity of parameters
-		if(bid != null && AlertType.checkValidity(alertType))
+		if(bid != null && bid.getState() == BidState.PUBLISHED && AlertType.checkValidity(alertType))
 		{
 			Alert newAlert = AlertFactory.structureAlert(this, bid, alertType);
-			if(newAlert != null)
-				return true;
+
+			return AlertManager.getInstance().addAlert(newAlert);
 		}
 		return false;
 	}
@@ -145,12 +143,4 @@ public class User {
 	public int getNumberMessage(Stack<String> messages) {
 		return messages.size();
 	}
-	
-	//getter
-	public ArrayList<Bid> getOwnedBids ()
-	{
-		return this.ownedBids;
-	}
-	
-	
 }
