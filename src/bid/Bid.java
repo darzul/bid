@@ -203,6 +203,14 @@ public class Bid {
 	// state access
 	// ------------
 	// getter with authentication
+
+	//TODO: Pourquoi une auth ? 
+	/*public BidState getState(User user)
+	{
+		if(this.seller == user)
+			return state;
+		return null;
+	}*/
 	public BidState getState()
 	{
 		return state;

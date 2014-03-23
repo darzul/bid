@@ -22,7 +22,7 @@ public class BidTest {
 	private Bid bidUnpublished;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void initialize() throws Exception {
 		System.setOut(new PrintStream(outContent));
 		item = new Item (0, "Un poney");
 		
@@ -32,8 +32,8 @@ public class BidTest {
 		
 		bidPublished = seller.getOwnedBids().get(0);
 		seller.publishBid(bidPublished);
-	
-		bidUnpublished = seller.getOwnedBids().get(0);
+
+		bidUnpublished = seller.getOwnedBids().get(1);
 		
 		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
@@ -41,46 +41,57 @@ public class BidTest {
 
 	@After
 	public void tearDown() throws Exception {
+		Bid.clearBid();
 	}
 	
 	@Test
+	// We can see the published bid but not the unpublished bid
 	public void seePublishedBidTest() {
 		assertEquals(1, Bid.getPublishedBids().size());
 	}
 	
 	@Test
+	// A buyer can make an offer on a published bid
 	public void makeOfferTest() {
 		assertTrue(buyer1.makeOffer( this.bidPublished, 500 ));
 	}
 	
 	@Test
-	public void makeOfferOnHisOwnBidTest() {
-		assertFalse(seller.makeOffer( this.bidPublished, 150 ));
-	}
-	
-	@Test
+	// A buyer can't make an offer on a unpublished bid
 	public void makeOfferOnUnpublishedBidTest() {
 		assertFalse(buyer1.makeOffer( this.bidUnpublished, 150 ));
 	}
 	
 	@Test
+	// A user can't make an offer on his own bid
+	public void makeOfferOnHisOwnBidTest() {
+		assertFalse(seller.makeOffer( this.bidPublished, 150 ));
+	}
+	
+	@Test
+	// A buyer can't make a negative offer
 	public void makeOfferWithNegativePriceTest() {
 		assertFalse(buyer1.makeOffer( this.bidPublished, -50 ));
 	}
 	
 	@Test
+	// A buyer can't make an offer under the min price
 	public void makeOfferUnderMinPriceTest() {
 		// TODO: Il faut faire le test du prix > prix mini avant de cr�er l'offre
 		assertFalse(buyer1.makeOffer( this.bidPublished, 50 ));
 	}
 	
 	@Test
+	// A buyer can't make an offer under or equal to another offer on the same bid
 	public void makeOfferUnderMaxOfferTest() {
+		assertTrue(buyer1.makeOffer( this.bidPublished, 150 ));
 		assertFalse(buyer2.makeOffer( this.bidPublished, 150 ));
 	}
 
 	@Test
+	// A buyer can't make an offer on a outdated bid
 	public void makeOfferOnOutdatedBidTest() {
+		Clock.getSingleton().addOneYear();
 		assertFalse(buyer1.makeOffer( this.bidPublished, 150 ));
 	}
 }
