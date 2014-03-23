@@ -29,7 +29,7 @@ public class BidTest {
 		seller.createBid(item, 10, 100);
 		bid = seller.getOwnedBids().get(0);
 		
-		buyer1 = new User("Karibou", "Bouvard","FranÁois");
+		buyer1 = new User("Karibou", "Bouvard","François");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 

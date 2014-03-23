@@ -13,7 +13,7 @@ public class User {
 	private String login;
 	private String lastName;
 	private String firstName;
-	private ArrayList<Bid> ownedBids = null;
+	private ArrayList<Bid> ownedBids;
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
@@ -27,7 +27,6 @@ public class User {
 	
 	// TODO: date de creation = today ?
 	// create a bid without any reservedPrice
-
 	public boolean createBid (Item item, int nbDay, float minPrice)
 	{
 		//TODO : quelle valeur pour le reservePrice ˆ minPrice ?

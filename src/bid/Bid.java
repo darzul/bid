@@ -17,7 +17,7 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
-	static private ArrayList<Bid> bids;
+	static private ArrayList<Bid> bids = new ArrayList<Bid>();
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
@@ -28,6 +28,7 @@ public class Bid {
 		this.reservedPrice = reservedPrice;
 		this.seller = seller;
 		this.bestOffer = null;
+		this.previousOffers = new HashSet<Offer>();
 	}
 	
 	
@@ -274,14 +275,12 @@ public class Bid {
 	// ----------
 	// search for all the bids owned by a user in the bid list
 	static public ArrayList<Bid> getBids (User user)
-	{
-		ArrayList<Bid> ownedBids = new ArrayList<Bid>();
-		
+	{	
 		for(Bid bid : bids) {
 		    if(bid.seller == user)
-		    	ownedBids.add(bid);
+		    	bids.add(bid);
 		}
-		return ownedBids;
+		return bids;
 	}
 	
 	
