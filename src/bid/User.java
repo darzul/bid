@@ -30,7 +30,7 @@ public class User {
 	{
 		if(item != null && nbDay > 0 && minPrice >= 0)
 		{
-			Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
 			this.ownedBids.add(newBid);
@@ -48,7 +48,7 @@ public class User {
 		// checks validity of parameters
 		if(item != null && nbDay > 0 && minPrice >= 0 && reservedPrice >= minPrice)
 		{
-			Date deadLine = new Date (System.currentTimeMillis() + 1000 * 3600 * 24 * nbDay);
+			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 			
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
 			this.ownedBids.add(newBid);
@@ -101,9 +101,16 @@ public class User {
 			if(ownedBid == bid)
 				return false;
 		}
+		
 		// if not, checks validity of parameters
-		if(bid != null && price > bid.getMinPrice())
+		if(bid != null && bid.getState() == BidState.PUBLISHED && 
+				price > bid.getMinPrice() && 
+				bid.getDeadLine().getTime() > Clock.getSingleton().getTime())
 		{
+			if (bid.getBestOffer() != null && price <= bid.getBestOffer().getPrice()){
+					return false;
+			}
+			
 			Offer newOffer = new Offer(this, price, bid);
 			if(newOffer != null)
 				return true;

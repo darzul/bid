@@ -33,41 +33,49 @@ public class UserTest {
 	}
 
 	@Test
+	// An user can create a bid without a reserved price
 	public void createBidWithoutReservedPriceTest() {
 		assertTrue(seller.createBid(item, 10, 100));
 	}
 	
 	@Test
+	// An user can create a bid with a reserved price
 	public void createBidWithReservedPriceTest() {
 		assertTrue(seller.createBid(item, 10, 100, 200));
 	}
 
 	@Test
+	// An user can't create a outpassed bid
 	public void createPassedDateBidTest() {
 		assertFalse(seller.createBid(item, -1, 100));
 	}
 
 	@Test
+	// An user can't create a bid with a min price upper than reserved price
 	public void createLowerReservedPriceThanMinPriceTest() {
-		assertFalse(seller.createBid(item, -10, 100, 50));
+		assertFalse(seller.createBid(item, 10, 100, 50));
 	}
 	
 	@Test
+	// An user can see the reserved price of his bid
 	public void getReservedPriceToSellerTest() {
 		assertTrue( bid.getReservedPrice(seller) == 200 );
 	}
 	
 	@Test
+	// An user can't see the reserved price of his bid
 	public void getReservedPriceToBuyerTest() {
 		assertTrue( bid.getReservedPrice(buyer) == -1 );
 	}	
 	
 	@Test
+	// An user can see his owned bid
 	public void getOwnedBidTest() {
 		assertEquals (1, seller.getOwnedBids().size());
 	}
 	
 	@Test
+	// An user can't create a bid with a negative price
 	public void createBidNegativePriceTest() {
 		assertFalse(buyer.createBid(item, 10, -100));
 	}

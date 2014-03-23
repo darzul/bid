@@ -41,24 +41,28 @@ public class AlertTest {
 	}
 
 	@Test
+	// An alert pop when an offer has been made on your owned bid
 	public void checkAlertSellerBidTest() {
 		buyer1.makeOffer( this.bid, 110 );
 		assertTrue(outContent.toString().contains("An offer has been made for your bid"));
 	}
 
 	@Test
+	// An alert pop when the reserved price is reached
 	public void checkAlertOutReservedPriceReachedTest() {
 		buyer1.makeOffer( this.bid, 200 );
 		assertTrue(outContent.toString().contains("The reserved price of the bid "));
 	}
 	
 	@Test
+	// An alert pop when an upper offer than your has been made
 	public void checkAlertOutBidedTest() {
 		buyer2.makeOffer( this.bid, 250 );
 		assertTrue(outContent.toString().contains(", an upper offer has been made."));
 	}
 	
 	@Test
+	// An alert pop when a bid has been cancelled
 	public void checkAlertBidCanceledTest() {
 		seller.cancelBid(bid);
 		assertTrue(outContent.toString().contains(" is canceled."));
