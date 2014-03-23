@@ -16,13 +16,16 @@ public class UserTest {
 	private User buyer;
 	private User seller;
 	private Bid bid;
-		
+
 	@Before
 	public void setUp() throws Exception {
 		System.setOut(new PrintStream(outContent));
 		item = new Item (0, "Un poney");
 		buyer = new User("DarzuL", "Bourderye", "Guillaume");
+		
 		seller = new User("Hoshiyo", "Guyen", "Anna");
+		seller.createBid(item, 10, 100);
+		bid = seller.getOwnedBids().get(0);
 	}
 
 	@After
@@ -32,7 +35,6 @@ public class UserTest {
 	@Test
 	public void createBidWithoutReservedPriceTest() {
 		assertTrue(seller.createBid(item, 10, 100));
-		this.bid = seller.getOwnedBids().get(0);
 	}
 	
 	@Test
@@ -62,11 +64,11 @@ public class UserTest {
 	
 	@Test
 	public void getOwnedBidTest() {
-		assertEquals (1, buyer.getOwnedBids().size());
+		assertEquals (1, seller.getOwnedBids().size());
 	}
 	
 	@Test
 	public void createBidNegativePriceTest() {
-		assertNull (buyer.createBid(item, 10, -100));
+		assertFalse(buyer.createBid(item, 10, -100));
 	}
 }
