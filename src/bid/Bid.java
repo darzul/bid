@@ -19,7 +19,6 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
-	ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 	 
 	
 	// constructor
@@ -79,8 +78,11 @@ public class Bid {
 				this.previousOffers.add(newOffer);
 				
 				if(this.bestOffer.getPrice()> this.reservedPrice) {
-					
+					ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
+					System.err.println("TABLEAU SIZE : " + alerts.size());
 					for(Alert alert : alerts) {
+						System.out.print("lol");
+						System.err.println("lol1");
 						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 							alert.trigger();
 						}
@@ -101,8 +103,11 @@ public class Bid {
 			this.previousOffers.add(newOffer);
 			
 			if(this.bestOffer.getPrice()> this.reservedPrice) {
-				
+				ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
+				System.err.println("TABLEAU SIZE : " + alerts.size());
 				for(Alert alert : alerts) {
+					System.out.print("lol");
+					System.err.println("lol2");
 					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 						alert.trigger();
 					}
