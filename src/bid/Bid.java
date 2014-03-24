@@ -63,7 +63,6 @@ public class Bid {
 	// returns true if it was allowed, false if not
 	public boolean setBestOffer(Offer newOffer)
 	{
-		ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		// to be applied, the new offer should :
 		// - be higher than the last offer
 		// - be higher the the minimum price
@@ -83,7 +82,6 @@ public class Bid {
 					System.err.println("TABLEAU SIZE : " + alerts.size());
 					for(Alert alert : alerts) {
 						System.out.print("lol");
-						System.err.println("lol1");
 						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 							alert.trigger();
 						}
@@ -108,7 +106,6 @@ public class Bid {
 				System.err.println("TABLEAU SIZE : " + alerts.size());
 				for(Alert alert : alerts) {
 					System.out.print("lol");
-					System.err.println("lol2");
 					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 						alert.trigger();
 					}

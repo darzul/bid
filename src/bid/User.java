@@ -38,7 +38,11 @@ public class User {
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid))
+			{
+				AlertManager.getInstance().addAlert(this, newBid, AlertType.RESERVEDPRICEREACHED );
+				
 				return true;
+			}
 		}
 		
 		return false;
