@@ -19,6 +19,8 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
+	ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
+	 
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
@@ -77,7 +79,12 @@ public class Bid {
 				this.previousOffers.add(newOffer);
 				
 				if(this.bestOffer.getPrice()> this.reservedPrice) {
-					AlertManager.getInstance().getAlerts(getSeller());
+					
+					for(Alert alert : alerts) {
+						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
+							alert.trigger();
+						}
+					}
 				}
 				
 				return true;
@@ -94,7 +101,12 @@ public class Bid {
 			this.previousOffers.add(newOffer);
 			
 			if(this.bestOffer.getPrice()> this.reservedPrice) {
-				AlertManager.getInstance().getAlerts(getSeller());
+				
+				for(Alert alert : alerts) {
+					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
+						alert.trigger();
+					}
+				}
 			}
 			
 			return true;
