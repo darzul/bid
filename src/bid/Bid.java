@@ -19,7 +19,6 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
-	ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 	 
 	
 	// constructor
@@ -64,6 +63,7 @@ public class Bid {
 	// returns true if it was allowed, false if not
 	public boolean setBestOffer(Offer newOffer)
 	{
+		ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		// to be applied, the new offer should :
 		// - be higher than the last offer
 		// - be higher the the minimum price
