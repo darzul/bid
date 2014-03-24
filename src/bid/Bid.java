@@ -321,8 +321,6 @@ public class Bid {
 	{
 		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		for(Alert alert : alerts) {
-			// TODO
 		}
 	}
-	
 }

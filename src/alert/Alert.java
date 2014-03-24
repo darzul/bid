@@ -25,8 +25,7 @@ public abstract class Alert {
 		return false;
 	}
 	
-	public void sendMessage(String mess)
-	{
+	public void sendMessage(String mess) {
 		user.sendMessage(mess);
 	}
 

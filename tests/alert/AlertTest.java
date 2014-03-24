@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Stack;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -55,8 +54,10 @@ public class AlertTest {
 	@Test
 	// An user can create an Alert on a bid owned by another user
 	public void createAlertOnPublishedBidTest() {
-		assertTrue(buyer1.createAlert(bid, AlertType.BIDCANCELED));
-		assertTrue(buyer1.cancelAlert(bid, AlertType.BIDCANCELED));
+		//assertTrue(buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertTrue(buyer2.createAlert(bid, AlertType.BIDCANCELED));
+		//assertTrue(buyer1.cancelAlert(bid, AlertType.BIDCANCELED));
+		assertTrue(buyer2.cancelAlert(bid, AlertType.BIDCANCELED));
 	}
 	
 	@Test

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Stack;
 
-import alert.Alert;
-import alert.AlertFactory;
 import alert.AlertManager;
 import alert.AlertType;
 
@@ -128,16 +126,7 @@ public class User {
 	// creates an alert on a bid
 	public boolean createAlert (Bid bid, AlertType alertType)
 	{
-		// checks validity of parameters
 		return AlertManager.getInstance().addAlert(this, bid, alertType);
-	}
-	
-	// cancel an alert
-	public boolean cancelAlert (Alert alert, AlertType alertType)
-	{
-		AlertManager.getInstance().deleteAlert(alert, this);
-	
-		return true;
 	}
 	
 	public boolean sendMessage(String mess) {
@@ -154,7 +143,7 @@ public class User {
 		return BidManager.getInstance().getOwnedBids(this);
 	}
 	
-	//TODO: Le user peut voir ses propres enchères ?
+	//TODO: Le user peut voir ses propres enchï¿½res ?
 	public ArrayList <Bid> getPublishedBids () {
 		return BidManager.getInstance().getPublishedBids();
 	}
@@ -168,7 +157,6 @@ public class User {
 	}
 
 	public boolean cancelAlert(Bid bid, AlertType type) {
-		AlertManager.getInstance().deleteAlert (this, bid, type);
-		return false;
+		return AlertManager.getInstance().deleteAlert (this, bid, type);
 	}
 }
