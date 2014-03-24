@@ -63,7 +63,6 @@ public class Bid {
 	// returns true if it was allowed, false if not
 	public boolean setBestOffer(Offer newOffer)
 	{
-		ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		// to be applied, the new offer should :
 		// - be higher than the last offer
 		// - be higher the the minimum price
@@ -79,7 +78,7 @@ public class Bid {
 				this.previousOffers.add(newOffer);
 				
 				if(this.bestOffer.getPrice()> this.reservedPrice) {
-					
+					ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 					for(Alert alert : alerts) {
 						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 							alert.trigger();
@@ -101,7 +100,7 @@ public class Bid {
 			this.previousOffers.add(newOffer);
 			
 			if(this.bestOffer.getPrice()> this.reservedPrice) {
-				
+				ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 				for(Alert alert : alerts) {
 					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 						alert.trigger();
