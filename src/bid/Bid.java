@@ -188,7 +188,7 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the seller if it was allowed, null if not
-	//TODO: WTF ?
+	// TODO: WTF ?
 /*	bid.getSeller()
 	{
 		if(this.state == BidState.PUBLISHED
@@ -335,7 +335,7 @@ public class Bid {
 		return null;
 	}
 	
-	
+	// TODO: wtf cette methode ? faut la virer ? de l'UML aussi
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{

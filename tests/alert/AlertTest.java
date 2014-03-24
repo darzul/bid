@@ -99,8 +99,7 @@ public class AlertTest {
 	// An alert pop when the reserved price is reached
 	public void checkAlertOutReservedPriceReachedTest() {
 		buyer1.makeOffer( bid, 200 );
-		//assertTrue(outContent.toString().contains("The reserved price of the bid "));
-		assertEquals("lol", outContent.toString());
+		assertTrue(outContent.toString().contains("The reserved price of the bid "));
 	}
 	
 	@Test
