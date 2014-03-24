@@ -3,6 +3,7 @@ package bid;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Stack;
 
 import alert.AlertManager;
@@ -131,6 +132,11 @@ public class User {
 	
 	public boolean sendMessage(String mess) {
 		messages.push(mess);
+		Iterator<String> it = messages.iterator();
+		
+		while(it.hasNext()) {
+			System.out.print(mess);
+		}
 		
 		return true;
 	}
