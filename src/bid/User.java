@@ -39,9 +39,8 @@ public class User {
 			
 			if(BidManager.getInstance().addBid(newBid))
 			{
-				this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
+				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 				
-				return true;
 			}
 		}
 		
@@ -60,9 +59,8 @@ public class User {
 			
 			if(BidManager.getInstance().addBid(newBid))
 			{
-				this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
+				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 				
-				return true;
 			}
 		}
 		
@@ -144,8 +142,8 @@ public class User {
 		
 		while(it.hasNext()) {
 			String iValue=(String)it.next();
-			System.out.print(iValue);
-			System.out.print("The reserved price of the bid"); 
+			//System.out.print(iValue);
+			//System.out.print("The reserved price of the bid"); 
 		}
 		
 		return true;

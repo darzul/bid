@@ -99,6 +99,7 @@ public class AlertTest {
 	public void checkAlertOutReservedPriceReachedTest() {
 		buyer1.makeOffer( bid, 200 );
 		assertTrue(outContent.toString().contains("The reserved price of the bid "));
+
 	}
 	
 	@Test
