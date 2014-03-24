@@ -97,6 +97,8 @@ public class User {
 	// make an offer on a bid
 	public boolean makeOffer (Bid bid, float price)
 	{
+		if (bid == null)
+			return false;
 		// checks if the user is not the bid's owner
 		ArrayList <Bid> ownedBids = BidManager.getInstance().getOwnedBids(this); 
 		for(Bid ownedBid : ownedBids)
@@ -104,19 +106,21 @@ public class User {
 			if(ownedBid == bid)
 				return false;
 		}
-		
 		// if not, checks validity of parameters
-		if(bid != null && bid.getState() == BidState.PUBLISHED && 
+		if(bid.getState() == BidState.PUBLISHED && 
 				price > bid.getMinPrice() && 
 				bid.getDeadLine().getTime() > Clock.getSingleton().getTime())
 		{
-			if (bid.getBestOffer() != null && price <= bid.getBestOffer().getPrice()){
-					return false;
+			if (bid.getBestOffer() == null){
+				Offer newOffer = new Offer(this, price, bid);
+				if(newOffer != null)
+					return true;
 			}
-			
-			Offer newOffer = new Offer(this, price, bid);
-			if(newOffer != null)
-				return true;
+			else if (price > bid.getBestOffer().getPrice()){
+				Offer newOffer = new Offer(this, price, bid);
+				if(newOffer != null)
+					return true;
+			}
 		}
 		return false;
 	}
@@ -125,13 +129,7 @@ public class User {
 	public boolean createAlert (Bid bid, AlertType alertType)
 	{
 		// checks validity of parameters
-		if(bid != null && bid.getState() == BidState.PUBLISHED && AlertType.checkValidity(alertType))
-		{
-			Alert newAlert = AlertFactory.structureAlert(this, bid, alertType);
-
-			return AlertManager.getInstance().addAlert(newAlert);
-		}
-		return false;
+		return AlertManager.getInstance().addAlert(this, bid, alertType);
 	}
 	
 	// cancel an alert
@@ -148,7 +146,29 @@ public class User {
 		return true;
 	}
 	
-	public int getNumberMessage(Stack<String> messages) {
+	public int getNumberMessage() {
 		return messages.size();
+	}
+	
+	public ArrayList <Bid> getOwnedBids () {
+		return BidManager.getInstance().getOwnedBids(this);
+	}
+	
+	//TODO: Le user peut voir ses propres enchères ?
+	public ArrayList <Bid> getPublishedBids () {
+		return BidManager.getInstance().getPublishedBids();
+	}
+
+	public void cancelBids() {
+		ArrayList <Bid> Ownedbids = this.getOwnedBids();
+		
+		for (Bid Ownedbid: Ownedbids){
+			this.cancelBid(Ownedbid);
+		}
+	}
+
+	public boolean cancelAlert(Bid bid, AlertType type) {
+		AlertManager.getInstance().deleteAlert (this, bid, type);
+		return false;
 	}
 }

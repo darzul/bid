@@ -220,16 +220,16 @@ public class Bid {
 		if(this.seller != user){
 			return false;
 		}
-		
-		if (newState.equals(BidState.CANCELED)){
+
+		if (newState == BidState.CANCELED){
 			
 			ArrayList <Alert> alerts = AlertManager.getInstance().getAlerts(this);
-			for (Alert alert: alerts){
-				if (alert.getType().equals(AlertType.BIDCANCELED)){
-					alert.trigger();
-				}
-			}
 			
+				for (Alert alert: alerts){
+					if (alert.getType().equals(AlertType.BIDCANCELED)){
+						alert.trigger();
+					}
+				}
 			BidManager.getInstance().deleteBid(this, user);
 			
 			return true;
@@ -237,16 +237,23 @@ public class Bid {
 		// to change the state from outside :
 		// - the user must be the seller
 		// - the current state must be different from ENDED
-		if(!(this.seller == user) || this.state.equals(BidState.ENDED))
+		if(this.state == BidState.ENDED)
 			return false;
 		// if the seller wants to cancel or hide a bid :
 		// - it must have not reach the reservedPrice
-		if((newState.equals(BidState.CREATED)) && bestOffer.getPrice() >= this.reservedPrice){
-			this.state = newState;
-			return true;
+		if(newState == BidState.CREATED){
+			if (bestOffer == null) {
+				this.state = newState;
+				return true;
+			}
+			else if (bestOffer.getPrice() >= this.reservedPrice) {
+				this.state = newState;
+				return true;
+			}
 		}
+
 		// you can always publish a bid
-		if(newState.equals(BidState.PUBLISHED)){
+		if(newState == BidState.PUBLISHED){
 			this.state = newState;
 			return true;
 		}
@@ -312,7 +319,7 @@ public class Bid {
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{
-		List<Alert> alerts = AlertManager.getAlerts(this);
+		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		for(Alert alert : alerts) {
 			// TODO
 		}

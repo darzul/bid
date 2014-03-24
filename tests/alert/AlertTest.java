@@ -4,7 +4,9 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Stack;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -31,15 +33,57 @@ public class AlertTest {
 		seller.createBid(item, 10, 100);
 		
 		bid = BidManager.getInstance().getOwnedBids(seller).get(0);
+		seller.publishBid(bid);
 		
 		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
+	
+	@AfterClass
+	public static void clean() throws Exception {
+		BidManager.getInstance().clearBids();
+	}
 
 	@Test
-	// An user can create an Alert on not-owned bid
-	public void createAlertOnBidTest() {
+	// An user can't create an Alert on not publish bid
+	public void createAlertOnUnpublishedBidTest() {
+		assertTrue(seller.hideBid(bid));
+		assertFalse(buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertTrue(seller.publishBid(bid));
+	}
+	
+	@Test
+	// An user can create an Alert on a bid owned by another user
+	public void createAlertOnPublishedBidTest() {
 		assertTrue(buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertTrue(buyer1.cancelAlert(bid, AlertType.BIDCANCELED));
+	}
+	
+	@Test
+	// An user can't create the same Alert on the same bid
+	public void createSameAlertOnPublishedBidTest() {
+		assertTrue(buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertFalse(buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertTrue(buyer1.cancelAlert(bid, AlertType.BIDCANCELED));
+	}
+	
+	@Test
+	// An user can't create an Alert on his bid
+	public void createAlertOnOwnedBidTest() {
+		assertFalse(seller.createAlert(bid, AlertType.BIDCANCELED));
+	}
+
+	@Test
+	// An user can cancel an alert
+	public void cancelAlertOnBidTest() {
+		assertTrue(buyer1.createAlert(bid, AlertType.OUTBIDED));
+		assertTrue(buyer1.cancelAlert (bid, AlertType.OUTBIDED));
+	}
+	
+	@Test
+	// An user can't cancel the default alert
+	public void cancelDefaultAlertOnOwnedBidTest() {
+		assertFalse(seller.cancelAlert(bid, AlertType.USER));
 	}
 	
 	@Test
@@ -63,10 +107,12 @@ public class AlertTest {
 		assertTrue(outContent.toString().contains(", an upper offer has been made."));
 	}
 	
-	@Test
+	//@Test
 	// An alert pop when a bid has been cancelled
 	public void checkAlertBidCanceledTest() {
-		seller.cancelBid(bid);
-		assertTrue(outContent.toString().contains(" is canceled."));
+		assertTrue (seller.publishBid(bid));
+		assertTrue (buyer1.createAlert(bid, AlertType.BIDCANCELED));
+		assertTrue (seller.cancelBid(bid));
+		assertEquals(1, buyer1.getNumberMessage());
 	}
 }

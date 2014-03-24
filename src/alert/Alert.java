@@ -17,6 +17,14 @@ public abstract class Alert {
 
 	public abstract boolean trigger ();
 	
+	public boolean equals(Alert alert){
+		if (alert.getBid() == bid && alert.getUser() == user &&
+				alert.getType() == alertType){
+			return true;
+		}
+		return false;
+	}
+	
 	public void sendMessage(String mess)
 	{
 		user.sendMessage(mess);

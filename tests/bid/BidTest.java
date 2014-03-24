@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,36 +26,45 @@ public class BidTest {
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		seller.createBid(item, 10, 100);
 		
-		bid = BidManager.getInstance().getOwnedBids(seller).get(0);
+		bid = seller.getOwnedBids().get(0);
 		
 		buyer1 = new User("Karibou", "Bouvard","Francois");
 		buyer2 = new User("Hoshiyo", "Guyen", "Anna");
 	}
 	
+	@AfterClass
+	public static void clean() throws Exception {
+		BidManager.getInstance().clearBids();
+	}
+	
 	@Test
 	// We can't see the unpublished bid
 	public void seeUnpublishedBidTest() {
-		seller.publishBid(bid);
-		assertEquals(1, BidManager.getInstance().getPublishedBids().size());
+		int nbBid = seller.getOwnedBids().size();
+		assertTrue(seller.hideBid(bid));
+		assertEquals(nbBid - 1, buyer1.getPublishedBids().size());
 	}
 	
 	@Test
 	// We can see the published bid
 	public void seePublishedBidTest() {
-		seller.publishBid(bid);
-		assertEquals(1, BidManager.getInstance().getPublishedBids().size());
-	}
-	
-	@Test
-	// A buyer can make an offer on a published bid
-	public void makeOfferTest() {
-		assertTrue(buyer1.makeOffer( bid, 500 ));
+		int nbBid = seller.getOwnedBids().size();
+		assertTrue(seller.publishBid(bid));
+		assertEquals(nbBid, buyer1.getPublishedBids().size());
 	}
 	
 	@Test
 	// A buyer can't make an offer on a unpublished bid
 	public void makeOfferOnUnpublishedBidTest() {
+		assertTrue(seller.hideBid(bid));
 		assertFalse(buyer1.makeOffer( bid, 150 ));
+	}
+	
+	@Test
+	// A buyer can make an offer on a published bid
+	public void makeOfferTest() {
+		assertTrue(seller.publishBid(bid));
+		assertTrue(buyer1.makeOffer( bid, 500 ));
 	}
 	
 	@Test
