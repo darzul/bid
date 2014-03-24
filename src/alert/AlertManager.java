@@ -3,6 +3,7 @@ package alert;
 import java.util.ArrayList;
 
 import bid.Bid;
+import bid.BidState;
 import bid.User;
 
 public class AlertManager {
@@ -45,8 +46,36 @@ public class AlertManager {
 		return alertsToOneBid;
 	}
 
-	public boolean addAlert(Alert newAlert) {
-		return alerts.add(newAlert);
+	public boolean addAlert(User user, Bid bid, AlertType type) {
+
+		System.err.println(type+" "+bid.getState());
+		if(bid != null && bid.getState() == BidState.PUBLISHED)
+		{
+			if (user == bid.getSeller())
+				return false;
+			
+			Alert newAlert = AlertFactory.structureAlert(user, bid, type);
+			for (Alert alert: alerts){
+				if (alert.equals(newAlert)){
+					return false;
+				}
+			}
+			System.err.println("OK");
+			alerts.add(newAlert);
+			
+			return true;
+		}
+		return false;
+	}
+
+	public boolean deleteAlert(User user, Bid bid, AlertType type) {
+		for (Alert alert: alerts){
+			if (alert.getUser() == user && alert.getBid() == bid && 
+					alert.getType() == type){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

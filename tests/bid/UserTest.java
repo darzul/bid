@@ -5,10 +5,9 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import alert.AlertType;
 
 public class UserTest {
 
@@ -30,7 +29,24 @@ public class UserTest {
 		
 		buyer = new User("Hoshiyo", "Guyen", "Anna");
 	}
+	
+	@AfterClass
+	public static void clean() throws Exception {
+		BidManager.getInstance().clearBids();
+	}
 
+	@Test
+	// A user can publish his bid
+	public void publishOwnedBid() {
+		assertTrue(seller.publishBid(bid));
+	}
+	
+	@Test
+	// // A user can't publish a bid owned by another user
+	public void publishNotOwnedBid() {
+		assertFalse(buyer.publishBid(bid));
+	}
+	
 	@Test
 	// An user can create a bid without a reserved price
 	public void createBidWithoutReservedPriceTest() {

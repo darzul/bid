@@ -52,4 +52,8 @@ public class BidManager {
 		
 		return bids.remove(bid);	
 	}
+
+	public void clearBids() {
+		bids.clear();
+	}
 }
