@@ -81,7 +81,6 @@ public class Bid {
 					ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 					System.err.println("TABLEAU SIZE : " + alerts.size());
 					for(Alert alert : alerts) {
-						System.out.print("lol");
 						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 							alert.trigger();
 						}
@@ -103,9 +102,7 @@ public class Bid {
 			
 			if(this.bestOffer.getPrice()> this.reservedPrice) {
 				ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
-				System.err.println("TABLEAU SIZE : " + alerts.size());
 				for(Alert alert : alerts) {
-					System.out.print("lol");
 					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
 						alert.trigger();
 					}

@@ -39,7 +39,7 @@ public class User {
 			
 			if(BidManager.getInstance().addBid(newBid))
 			{
-				AlertManager.getInstance().addAlert(this, newBid, AlertType.RESERVEDPRICEREACHED );
+				this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 				
 				return true;
 			}
@@ -60,7 +60,7 @@ public class User {
 			
 			if(BidManager.getInstance().addBid(newBid))
 			{
-				AlertManager.getInstance().addAlert(this, newBid, AlertType.RESERVEDPRICEREACHED );
+				this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 				
 				return true;
 			}
