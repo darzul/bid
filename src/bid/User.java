@@ -55,7 +55,11 @@ public class User {
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid))
+			{
+				AlertManager.getInstance().addAlert(this, newBid, AlertType.RESERVEDPRICEREACHED );
+				
 				return true;
+			}
 		}
 		
 		return false;
@@ -137,6 +141,7 @@ public class User {
 		while(it.hasNext()) {
 			String iValue=(String)it.next();
 			System.out.print(iValue);
+			System.out.print("The reserved price of the bid"); 
 		}
 		return true;
 	}
