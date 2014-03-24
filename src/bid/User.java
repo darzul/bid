@@ -131,7 +131,6 @@ public class User {
 	
 	public boolean sendMessage(String mess) {
 		messages.push(mess);
-		
 		return true;
 	}
 	
