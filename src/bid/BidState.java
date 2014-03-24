@@ -1,7 +1,5 @@
 package bid;
 
-import alert.AlertType;
-
 public enum BidState {
 	CREATED,	// can be viewed by owner
 	PUBLISHED,	// can be viewed by owner and every other users

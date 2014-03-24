@@ -49,4 +49,10 @@ public class AlertManager {
 		return alerts.add(newAlert);
 	}
 	
+	public boolean deleteAlert (Alert alert, User user) {
+		if (user != alert.getUser())
+			return false;
+		
+		return alerts.remove(alert);	
+	}
 }

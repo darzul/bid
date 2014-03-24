@@ -134,6 +134,14 @@ public class User {
 		return false;
 	}
 	
+	// cancel an alert
+	public boolean cancelAlert (Alert alert, AlertType alertType)
+	{
+		AlertManager.getInstance().deleteAlert(alert, this);
+	
+		return true;
+	}
+	
 	public boolean sendMessage(String mess) {
 		messages.push(mess);
 		
