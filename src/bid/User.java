@@ -135,7 +135,8 @@ public class User {
 		Iterator<String> it = messages.iterator();
 		
 		while(it.hasNext()) {
-			System.out.print(mess);
+			String iValue=(String)it.next();
+			System.out.print(iValue);
 		}
 		
 		return true;

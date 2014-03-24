@@ -76,6 +76,10 @@ public class Bid {
 				this.bestOffer = newOffer;
 				this.previousOffers.add(newOffer);
 				
+				if(this.bestOffer.getPrice()> this.reservedPrice) {
+					AlertManager.getInstance().getAlerts(getSeller());
+				}
+				
 				return true;
 			}
 			else
@@ -88,6 +92,10 @@ public class Bid {
 				&& newOffer.getUser() != null){
 			this.bestOffer = newOffer;
 			this.previousOffers.add(newOffer);
+			
+			if(this.bestOffer.getPrice()> this.reservedPrice) {
+				AlertManager.getInstance().getAlerts(getSeller());
+			}
 			
 			return true;
 		}
