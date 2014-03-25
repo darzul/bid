@@ -41,6 +41,7 @@ public class AlertTest {
 	@AfterClass
 	public static void clean() throws Exception {
 		BidManager.getInstance().clearBids();
+		System.setOut(null);
 	}
 
 	@Test
@@ -99,7 +100,6 @@ public class AlertTest {
 	public void checkAlertOutReservedPriceReachedTest() {
 		buyer1.makeOffer( bid, 200 );
 		assertTrue(outContent.toString().contains("The reserved price of the bid "));
-
 	}
 	
 	@Test

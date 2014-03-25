@@ -7,10 +7,11 @@ public class BidManager {
 	private static BidManager bidInstance;
 	private ArrayList<Bid> bids = new ArrayList<Bid>();
 	
-	private BidManager () {
+	private BidManager() {
 	}
 
-	public static BidManager getInstance () {
+	public static BidManager getInstance()
+	{
 		if(bidInstance == null) {
 			bidInstance = new BidManager();
 		}
@@ -21,7 +22,7 @@ public class BidManager {
 	// bids access
 	// ----------
 	// search for all the bids owned by a user in the bid list
-	public ArrayList<Bid> getOwnedBids (User user)
+	public ArrayList<Bid> getOwnedBids(User user)
 	{	
 		ArrayList<Bid> ownedBids = new ArrayList<Bid>();
 		for(Bid bid : bids) {
@@ -32,7 +33,7 @@ public class BidManager {
 	}
 
 	// search for all the published bids
-	public ArrayList<Bid> getPublishedBids ()
+	public ArrayList<Bid> getPublishedBids()
 	{	
 		ArrayList<Bid> publishedBids = new ArrayList<Bid>();
 		for(Bid bid : bids) {

@@ -79,7 +79,8 @@ public class Bid {
 				
 				if(this.bestOffer.getPrice()> this.reservedPrice) {
 					ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
-					System.err.println("taille liste : " + alerts.size());
+
+					System.err.println("TABLEAU SIZE : " + alerts.size());
 
 					for(Alert alert : alerts) {
 						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
@@ -191,7 +192,7 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the seller if it was allowed, null if not
-	//TODO: WTF ?
+	// TODO: WTF ?
 /*	bid.getSeller()
 	{
 		if(this.state == BidState.PUBLISHED
@@ -338,7 +339,7 @@ public class Bid {
 		return null;
 	}
 	
-	
+	// TODO: wtf cette methode ? faut la virer ? de l'UML aussi
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{

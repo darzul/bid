@@ -139,7 +139,6 @@ public class User {
 			System.out.print(iValue);
 			//System.out.print("The reserved price of the bid"); 
 		}
-		
 		return true;
 	}
 	
