@@ -39,7 +39,6 @@ public class User {
 			Bid newBid = new Bid(item, deadLine, BidState.CREATED, minPrice, minPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid)) {
-				System.err.println("Presque");
 				return this.createAlert(newBid, AlertType.SELLER);
 			}
 		}
@@ -143,7 +142,7 @@ public class User {
 					// Trigger for the seller
 					alert = AlertManager.getInstance()
 							.getAlert(bid.getSeller(), bid, AlertType.SELLER);
-					System.err.println("HEY");
+
 					if (alert != null)
 						alert.trigger();
 					
@@ -167,13 +166,13 @@ public class User {
 	
 	public boolean sendMessage(String mess) {
 		messages.push(mess);
-		Iterator<String> it = messages.iterator();
-		
-		while(it.hasNext()) {
-			String iValue=(String)it.next();
-			System.out.print(iValue);
-			//System.out.print("The reserved price of the bid"); 
-		}
+
+		return true;
+	}
+	
+	public boolean readMessage() {
+		System.out.println(messages.pop());
+
 		return true;
 	}
 	

@@ -50,7 +50,6 @@ public class AlertManager {
 
 		if (bid == null)
 			return false;
-		System.err.println(type+" "+bid.getState());
 		
 		if(user == bid.getSeller())
 		{
@@ -63,7 +62,6 @@ public class AlertManager {
 							return false;
 						}
 					}
-					System.err.println("OK");
 					return alerts.add(newAlert);
 				}
 		}
@@ -76,7 +74,6 @@ public class AlertManager {
 						return false;
 					}
 				}
-				System.err.println("OK");
 				return alerts.add(newAlert);
 			}
 		}

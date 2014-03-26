@@ -116,6 +116,7 @@ public class AlertTest {
 		assertTrue (buyer1.createAlert(bid, AlertType.BIDCANCELED));
 		assertTrue (seller.cancelBid(bid));
 		assertEquals(1, buyer1.getNumberMessage());
+		buyer1.readMessage();
 	}
 	
 	@Test
@@ -123,6 +124,7 @@ public class AlertTest {
 	public void checkAlertSellerBidTest() {
 		buyer1.makeOffer( bid, 110 );
 		assertEquals(1, seller.getNumberMessage());
+		seller.readMessage();
 	}
 
 	@Test
@@ -131,6 +133,7 @@ public class AlertTest {
 		assertTrue (buyer1.createAlert(bid, AlertType.RESERVEDPRICEREACHED));
 		buyer1.makeOffer( bid, 200 );
 		assertEquals(1, buyer1.getNumberMessage());
+		buyer1.readMessage();
 	}
 	
 	@Test
@@ -140,5 +143,6 @@ public class AlertTest {
 		assertTrue (buyer1.createAlert(bid, AlertType.OUTBIDED));
 		buyer2.makeOffer( bid, 175 );
 		assertEquals(1, buyer1.getNumberMessage());
+		buyer1.readMessage();
 	}
 }
