@@ -22,8 +22,9 @@ public class Bid {
 	 
 	
 	// constructor
-	public Bid(Date deadLine, BidState state, float minPrice,
+	public Bid(Item item, Date deadLine, BidState state, float minPrice,
 			float reservedPrice, User seller) {
+		this.item = item;
 		this.deadLine = deadLine;
 		this.state = state;
 		this.minPrice = minPrice;
@@ -346,5 +347,10 @@ public class Bid {
 		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		for(Alert alert : alerts) {
 		}
+	}
+
+	public void clearOffer() {
+		bestOffer = null;
+		previousOffers.clear();
 	}
 }

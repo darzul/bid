@@ -6,24 +6,14 @@ public class Item {
 	private String description;
 	
 	// constructor
-	public Item(int iD, String description) {
-		ID = iD;
+	public Item(int id, String description) {
+		ID = id;
 		this.description = description;
-	}
-
-	// setter
-	public void setId(int id) {
-	     ID = id;
 	}
 
 	// getter
 	public int getId() {
 	     return ID;
-	}
-	
-	// setter
-	public void setDescription(String info) {
-	     description = info;
 	}
 
 	// getter

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Stack;
 
+import alert.Alert;
 import alert.AlertManager;
 import alert.AlertType;
 
@@ -19,7 +20,7 @@ public class User {
 	
 	// constructor
 	public User(String login, String lastName, String firstName) {
-		super();
+
 		this.login = login;
 		this.lastName = lastName;
 		this.firstName = firstName;
@@ -35,10 +36,12 @@ public class User {
 		{
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 
-			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
+			Bid newBid = new Bid(item, deadLine, BidState.CREATED, minPrice, minPrice, this);
 			
-			if(BidManager.getInstance().addBid(newBid))
-				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
+			if(BidManager.getInstance().addBid(newBid)) {
+				System.err.println("Presque");
+				return this.createAlert(newBid, AlertType.SELLER);
+			}
 		}
 		
 		return false;
@@ -52,10 +55,10 @@ public class User {
 		{
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
 			
-			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
+			Bid newBid = new Bid(item, deadLine, BidState.CREATED, minPrice, reservedPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid))
-				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
+				return this.createAlert(newBid, AlertType.SELLER);
 		}
 		
 		return false;
@@ -112,18 +115,50 @@ public class User {
 		{
 			if (bid.getBestOffer() == null){
 				Offer newOffer = new Offer(this, price, bid);
+				
+				// Trigger for the seller
+				Alert alert = AlertManager.getInstance()
+						.getAlert(bid.getSeller(), bid, AlertType.SELLER);
+				
+				if (alert != null)
+					alert.trigger();
+				
 				if(newOffer != null)
 					return true;
 			}
 			else if (price > bid.getBestOffer().getPrice()){
+				
+				Offer oldOffer = bid.getBestOffer();
 				Offer newOffer = new Offer(this, price, bid);
-				if(newOffer != null)
+				
+				if(newOffer != null) {
+					
+					// Trigger for the old buyer if he has been an alert
+					Alert alert = AlertManager.getInstance()
+							.getAlert(oldOffer.getUser(), bid, AlertType.OUTBIDED);
+					
+					if (alert != null)
+						alert.trigger();
+					
+					// Trigger for the seller
+					alert = AlertManager.getInstance()
+							.getAlert(bid.getSeller(), bid, AlertType.SELLER);
+					System.err.println("HEY");
+					if (alert != null)
+						alert.trigger();
+					
 					return true;
+				}
 			}
 		}
 		return false;
 	}
 	
+	public ArrayList <Alert> getOwnedAlerts() {
+		return AlertManager.getInstance().getAlerts(this);
+	}
+
+
 	// creates an alert on a bid
 	public boolean createAlert (Bid bid, AlertType alertType)
 	{
@@ -165,5 +200,9 @@ public class User {
 
 	public boolean cancelAlert(Bid bid, AlertType type) {
 		return AlertManager.getInstance().deleteAlert (this, bid, type);
+	}
+	
+	public void clearMessages () {
+		this.messages.clear();
 	}
 }

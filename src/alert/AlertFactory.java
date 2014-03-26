@@ -11,7 +11,7 @@ public abstract class AlertFactory {
 		
 		switch(type)
 		{
-			case USER:
+			case SELLER:
 				alert = new AlertSeller(user, bid, type);
 				break;
 				

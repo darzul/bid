@@ -5,9 +5,9 @@ import bid.User;
 
 public abstract class Alert {
 
-	private User user;
-	private Bid bid;
-	private AlertType alertType;
+	User user;
+	Bid bid;
+	AlertType alertType;
 	
 	public Alert(User user, Bid bid, AlertType alertType) {
 		this.user = user;

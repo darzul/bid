@@ -2,7 +2,7 @@ package alert;
 
 public enum AlertType {
 
-	USER,
+	SELLER,
 	RESERVEDPRICEREACHED,
 	BIDCANCELED,
 	OUTBIDED;

@@ -48,37 +48,67 @@ public class AlertManager {
 
 	public boolean addAlert(User user, Bid bid, AlertType type) {
 
+		if (bid == null)
+			return false;
 		System.err.println(type+" "+bid.getState());
-		if(bid != null && bid.getState() == BidState.PUBLISHED)
+		
+		if(user == bid.getSeller())
 		{
-			if (user == bid.getSeller())
-				return false;
-			
-			Alert newAlert = AlertFactory.structureAlert(user, bid, type);
-			for (Alert alert: alerts){
-				if (alert.equals(newAlert)){
-					return false;
+			if (bid.getState() == BidState.CREATED
+				&& type == AlertType.SELLER) {
+
+					Alert newAlert = AlertFactory.structureAlert(user, bid, type);
+					for (Alert alert: alerts){
+						if (alert.equals(newAlert)){
+							return false;
+						}
+					}
+					System.err.println("OK");
+					return alerts.add(newAlert);
 				}
+		}
+		else {
+			if(bid.getState() == BidState.PUBLISHED)
+			{
+				Alert newAlert = AlertFactory.structureAlert(user, bid, type);
+				for (Alert alert: alerts){
+					if (alert.equals(newAlert)){
+						return false;
+					}
+				}
+				System.err.println("OK");
+				return alerts.add(newAlert);
 			}
-			System.err.println("OK");
-			alerts.add(newAlert);
-			
-			return true;
 		}
 		return false;
 	}
 
 	public boolean deleteAlert(User user, Bid bid, AlertType type) {
+		
+		if (type == AlertType.SELLER)
+			return false;
+		
 		for (Alert alert: alerts){
 			if (alert.getUser() == user && alert.getBid() == bid && 
 					alert.getType() == type){
+				
+				alerts.remove(alert);
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public void clarAlerts() {
+	public void clearAlerts() {
 		alerts.clear();
+	}
+
+	public Alert getAlert(User user, Bid bid, AlertType type) {
+		for (Alert alert: alerts) {
+			if (alert.getUser() == user && alert.getBid() == bid
+					&& alert.getType() == type)
+				return alert;
+		}
+		return null;
 	}
 }
