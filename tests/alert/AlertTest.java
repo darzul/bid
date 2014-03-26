@@ -2,19 +2,16 @@ package alert;
 
 import static org.junit.Assert.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import user.User;
 import bid.Bid;
 import bid.BidManager;
 import bid.Item;
-import bid.User;
 
 public class AlertTest {
 

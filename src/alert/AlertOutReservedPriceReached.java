@@ -1,7 +1,7 @@
 package alert;
 
+import user.User;
 import bid.Bid;
-import bid.User;
 
 public class AlertOutReservedPriceReached extends Alert {
 
@@ -16,7 +16,7 @@ public class AlertOutReservedPriceReached extends Alert {
 	@Override
 	public boolean trigger()
 	{
-		String mess = "The reserved price of the bid "+ bid.getItem().getId() + " is reached by an offer.";
+		String mess = "The reserved price of the bid "+ bid.getItem(user).getId() + " is reached by an offer.";
 		sendMessage(mess);
 		
 		return true;

@@ -2,9 +2,9 @@ package alert;
 
 import java.util.ArrayList;
 
+import user.User;
 import bid.Bid;
 import bid.BidState;
-import bid.User;
 
 public class AlertManager {
 	
@@ -51,9 +51,9 @@ public class AlertManager {
 		if (bid == null)
 			return false;
 		
-		if(user == bid.getSeller())
+		if(user == bid.getSeller(user))
 		{
-			if (bid.getState() == BidState.CREATED
+			if (bid.getState(user) == BidState.CREATED
 				&& type == AlertType.SELLER) {
 
 					Alert newAlert = AlertFactory.structureAlert(user, bid, type);
@@ -66,7 +66,7 @@ public class AlertManager {
 				}
 		}
 		else {
-			if(bid.getState() == BidState.PUBLISHED)
+			if(bid.getState(user) == BidState.PUBLISHED)
 			{
 				Alert newAlert = AlertFactory.structureAlert(user, bid, type);
 				for (Alert alert: alerts){

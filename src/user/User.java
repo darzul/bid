@@ -1,11 +1,16 @@
-package bid;
+package user;
 
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Stack;
 
+import bid.Bid;
+import bid.BidManager;
+import bid.BidState;
+import bid.Clock;
+import bid.Item;
+import bid.Offer;
 import alert.Alert;
 import alert.AlertManager;
 import alert.AlertType;
@@ -30,8 +35,6 @@ public class User {
 	// create a bid without any reservedPrice
 	public boolean createBid (Item item, int nbDay, float minPrice)
 	{
-		//TODO : quelle valeur pour le reservePrice � minPrice ?
-
 		if(item != null && nbDay > 0 && minPrice >= 0)
 		{
 			Date deadLine = new Date (Clock.getSingleton().getTime() + 1000 * 3600 * 24 * nbDay);
@@ -108,16 +111,16 @@ public class User {
 				return false;
 		}
 		// if not, checks validity of parameters
-		if(bid.getState() == BidState.PUBLISHED && 
+		if(bid.getState(this) == BidState.PUBLISHED && 
 				price > bid.getMinPrice() && 
-				bid.getDeadLine().getTime() > Clock.getSingleton().getTime())
+				bid.getDeadLine(this).getTime() > Clock.getSingleton().getTime())
 		{
-			if (bid.getBestOffer() == null){
+			if (bid.getBestOffer(this) == null){
 				Offer newOffer = new Offer(this, price, bid);
 				
 				// Trigger for the seller
 				Alert alert = AlertManager.getInstance()
-						.getAlert(bid.getSeller(), bid, AlertType.SELLER);
+						.getAlert(bid.getSeller(this), bid, AlertType.SELLER);
 				
 				if (alert != null)
 					alert.trigger();
@@ -125,9 +128,9 @@ public class User {
 				if(newOffer != null)
 					return true;
 			}
-			else if (price > bid.getBestOffer().getPrice()){
+			else if (price > bid.getBestOffer(this).getPrice()){
 				
-				Offer oldOffer = bid.getBestOffer();
+				Offer oldOffer = bid.getBestOffer(this);
 				Offer newOffer = new Offer(this, price, bid);
 				
 				if(newOffer != null) {
@@ -141,7 +144,7 @@ public class User {
 					
 					// Trigger for the seller
 					alert = AlertManager.getInstance()
-							.getAlert(bid.getSeller(), bid, AlertType.SELLER);
+							.getAlert(bid.getSeller(this), bid, AlertType.SELLER);
 
 					if (alert != null)
 						alert.trigger();
@@ -184,7 +187,6 @@ public class User {
 		return BidManager.getInstance().getOwnedBids(this);
 	}
 	
-	//TODO: Le user peut voir ses propres ench�res ?
 	public ArrayList <Bid> getPublishedBids () {
 		return BidManager.getInstance().getPublishedBids();
 	}

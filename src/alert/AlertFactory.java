@@ -1,7 +1,7 @@
 package alert;
 
+import user.User;
 import bid.Bid;
-import bid.User;
 
 public abstract class AlertFactory {
 	

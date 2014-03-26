@@ -1,5 +1,7 @@
 package bid;
 
+import user.User;
+
 public class Offer {
 
 	private User user;

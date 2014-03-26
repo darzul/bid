@@ -1,7 +1,7 @@
 package alert;
 
+import user.User;
 import bid.Bid;
-import bid.User;
 
 public class AlertBidCanceled extends Alert {
 
@@ -14,7 +14,7 @@ public class AlertBidCanceled extends Alert {
 	@Override
 	public boolean trigger() 
 	{
-		String mess = "The bid "+ getBid().getItem().getId() + " is canceled.";
+		String mess = "The bid "+ getBid().getItem(user).getId() + " is canceled.";
 		sendMessage(mess);
 		
 		return true;

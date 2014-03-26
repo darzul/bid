@@ -1,7 +1,7 @@
 package alert;
 
+import user.User;
 import bid.Bid;
-import bid.User;
 
 public class AlertSeller extends Alert {
 
@@ -14,7 +14,7 @@ public class AlertSeller extends Alert {
 	@Override
 	public boolean trigger() 
 	{
-		String mess = "An offer has been made for your bid "+ getBid().getItem().getId() + ".";
+		String mess = "An offer has been made for your bid "+ getBid().getItem(user).getId() + ".";
 		sendMessage(mess);
 		
 		return true;

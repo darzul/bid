@@ -6,10 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import user.User;
 import alert.AlertManager;
 
 public class UserTest {
@@ -22,7 +22,7 @@ public class UserTest {
 	@BeforeClass
 	public static void initialize() throws Exception {
 		System.setOut(new PrintStream(outContent));
-		item = new Item (0, "Un poney");
+		item = new Item (0, "Un poney qui boite");
 		seller = new User("DarzuL", "Bourderye", "Guillaume");
 		buyer = new User("Hoshiyo", "Guyen", "Anna");
 	}

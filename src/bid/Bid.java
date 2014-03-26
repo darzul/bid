@@ -3,8 +3,8 @@ package bid;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
+import user.User;
 import alert.Alert;
 import alert.AlertManager;
 import alert.AlertType;
@@ -39,7 +39,7 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the bestOffer if it was allowed, null if not
-	public Offer getBestOffer()
+	Offer getBestOffer()
 	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
@@ -125,7 +125,7 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the date if it was allowed, null if not
-	public Date getDeadLine()
+	Date getDeadLine()
 	{
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
@@ -146,16 +146,6 @@ public class Bid {
 		}
 		return null;
 	}
-	// setter with authentication
-	// returns true if it was allowed, false if not
-	public boolean setDeadLine(Date newDeadLine, User user)
-	{
-		if(this.seller == user && this.state == BidState.CREATED){
-			this.deadLine = newDeadLine;
-			return true;
-		}
-		return false;
-	}
 
 	
 	// ---------------
@@ -163,58 +153,26 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the item if it was allowed, null if not
-	public Item getItem()
-	{
-		if(this.state == BidState.PUBLISHED
-				|| this.state == BidState.ENDED)
-			return this.item;
-		return null;
-	}
-	// getter with authentication
-	// returns the item if it was allowed, null if not
 	public Item getItem(User user)
 	{
-		if(this.state == BidState.PUBLISHED
-				|| this.state == BidState.ENDED
-				|| this.seller == user)
-			return this.item;
-		for(Offer offer : previousOffers) {
-		    if(offer.getUser() == user && this.state == BidState.CANCELED)
-		    	return this.item;
-		}
-		return null;
-	}
-	
-	
-	// ---------------
-	// seller access
-	// ---------------
-	// getter simple
-	// returns the seller if it was allowed, null if not
-	// TODO: WTF ?
-/*	bid.getSeller()
-	{
+		if (this.seller != user && this.state != BidState.PUBLISHED)
+			return null;
+		
 		if(this.state == BidState.PUBLISHED
 				|| this.state == BidState.ENDED)
-			return this.seller;
+			return this.item;
 		return null;
 	}
-	// getter with authentication
-	// returns the seller if it was allowed, null if not
-	public User getSeller(User user)
-	{
-		if(this.state == BidState.PUBLISHED
-				|| this.state == BidState.ENDED
-				|| this.seller == user)
-			return this.seller;
-		for(Offer offer : previousOffers) {
-		    if(offer.getUser() == user && this.state == BidState.CANCELED)
-		    	return this.seller;
-		}
-		return null;
+
+	public User getSeller(User user) {
+		
+		if (this.seller != user && this.state != BidState.PUBLISHED)
+			return null;
+		
+		return this.seller;
 	}
-*/
-	public User getSeller() {
+	
+	User getSeller() {
 		return this.seller;
 	}
 
@@ -223,17 +181,20 @@ public class Bid {
 	// ------------
 	// getter with authentication
 
-	//TODO: Pourquoi une auth ? 
-	/*public BidState getState(User user)
+	public BidState getState(User user)
 	{
-		if(this.seller == user)
-			return state;
-		return null;
-	}*/
-	public BidState getState()
+		if (this.state != BidState.PUBLISHED && this.seller != user) {
+			return null;
+		}
+		
+		return state;
+	}
+	
+	BidState getState()
 	{
 		return state;
 	}
+
 	// setter
 	// returns true if it was allowed, false if not
 	public boolean setState(BidState newState, User user)
@@ -338,15 +299,7 @@ public class Bid {
 		return null;
 	}
 	
-	// TODO: wtf cette methode ? faut la virer ? de l'UML aussi
 	// search alerts corresponding to the last event and triggers it
-	private void checkAlerts()
-	{
-		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
-		for(Alert alert : alerts) {
-		}
-	}
-
 	public void clearOffer() {
 		bestOffer = null;
 		previousOffers.clear();

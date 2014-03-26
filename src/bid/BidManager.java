@@ -2,6 +2,8 @@ package bid;
 
 import java.util.ArrayList;
 
+import user.User;
+
 public class BidManager {
 	
 	private static BidManager bidInstance;
