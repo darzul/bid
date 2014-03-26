@@ -3,10 +3,9 @@ package bid;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Stack;
 
-import alert.Alert;
-import alert.AlertFactory;
 import alert.AlertManager;
 import alert.AlertType;
 
@@ -39,7 +38,7 @@ public class User {
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, minPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid))
-				return true;
+				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 		}
 		
 		return false;
@@ -56,7 +55,7 @@ public class User {
 			Bid newBid = new Bid(deadLine, BidState.CREATED, minPrice, reservedPrice, this);
 			
 			if(BidManager.getInstance().addBid(newBid))
-				return true;
+				return this.createAlert(newBid, AlertType.RESERVEDPRICEREACHED);
 		}
 		
 		return false;
@@ -128,13 +127,18 @@ public class User {
 	// creates an alert on a bid
 	public boolean createAlert (Bid bid, AlertType alertType)
 	{
-		// checks validity of parameters
 		return AlertManager.getInstance().addAlert(this, bid, alertType);
 	}
 	
 	public boolean sendMessage(String mess) {
 		messages.push(mess);
+		Iterator<String> it = messages.iterator();
 		
+		while(it.hasNext()) {
+			String iValue=(String)it.next();
+			System.out.print(iValue);
+			//System.out.print("The reserved price of the bid"); 
+		}
 		return true;
 	}
 	
@@ -146,7 +150,7 @@ public class User {
 		return BidManager.getInstance().getOwnedBids(this);
 	}
 	
-	//TODO: Le user peut voir ses propres enchères ?
+	//TODO: Le user peut voir ses propres enchï¿½res ?
 	public ArrayList <Bid> getPublishedBids () {
 		return BidManager.getInstance().getPublishedBids();
 	}

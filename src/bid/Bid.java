@@ -19,6 +19,7 @@ public class Bid {
 	private User seller;
 	private Offer bestOffer;
 	private HashSet<Offer> previousOffers;
+	 
 	
 	// constructor
 	public Bid(Date deadLine, BidState state, float minPrice,
@@ -76,6 +77,18 @@ public class Bid {
 				this.bestOffer = newOffer;
 				this.previousOffers.add(newOffer);
 				
+				if(this.bestOffer.getPrice()> this.reservedPrice) {
+					ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
+
+					System.err.println("TABLEAU SIZE : " + alerts.size());
+
+					for(Alert alert : alerts) {
+						if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
+							alert.trigger();
+						}
+					}
+				}
+				
 				return true;
 			}
 			else
@@ -88,6 +101,17 @@ public class Bid {
 				&& newOffer.getUser() != null){
 			this.bestOffer = newOffer;
 			this.previousOffers.add(newOffer);
+			
+			if(this.bestOffer.getPrice()> this.reservedPrice) {
+				ArrayList<Alert> alerts = AlertManager.getInstance().getAlerts(this);
+				System.err.println("taille liste maintenant : " + alerts.size());
+
+				for(Alert alert : alerts) {
+					if(alert.getType() == AlertType.RESERVEDPRICEREACHED) {
+						alert.trigger();
+					}
+				}
+			}
 			
 			return true;
 		}
@@ -168,7 +192,7 @@ public class Bid {
 	// ---------------
 	// getter simple
 	// returns the seller if it was allowed, null if not
-	//TODO: WTF ?
+	// TODO: WTF ?
 /*	bid.getSeller()
 	{
 		if(this.state == BidState.PUBLISHED
@@ -315,14 +339,12 @@ public class Bid {
 		return null;
 	}
 	
-	
+	// TODO: wtf cette methode ? faut la virer ? de l'UML aussi
 	// search alerts corresponding to the last event and triggers it
 	private void checkAlerts()
 	{
 		List<Alert> alerts = AlertManager.getInstance().getAlerts(this);
 		for(Alert alert : alerts) {
-			// TODO
 		}
 	}
-	
 }

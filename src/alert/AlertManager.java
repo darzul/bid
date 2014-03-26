@@ -81,5 +81,4 @@ public class AlertManager {
 	public void clarAlerts() {
 		alerts.clear();
 	}
-	
 }
