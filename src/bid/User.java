@@ -160,7 +160,6 @@ public class User {
 	}
 
 	public boolean cancelAlert(Bid bid, AlertType type) {
-		AlertManager.getInstance().deleteAlert (this, bid, type);
-		return false;
+		return AlertManager.getInstance().deleteAlert (this, bid, type);
 	}
 }

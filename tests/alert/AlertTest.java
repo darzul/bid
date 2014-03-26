@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Stack;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,6 +43,11 @@ public class AlertTest {
 	@AfterClass
 	public static void clean() throws Exception {
 		BidManager.getInstance().clearBids();
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		AlertManager.getInstance().clarAlerts();
 	}
 
 	@Test

@@ -77,5 +77,9 @@ public class AlertManager {
 		}
 		return false;
 	}
+
+	public void clarAlerts() {
+		alerts.clear();
+	}
 	
 }
